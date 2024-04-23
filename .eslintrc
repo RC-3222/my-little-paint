@@ -9,7 +9,7 @@
   "parserOptions": { "project": true, "tsconfigRootDir": "./" },
   "plugins": ["@typescript-eslint", "prettier"],
   "root": true,
-  "ignorePatterns": ["dist", "*.s?{c,a}ss"],
+  "ignorePatterns": ["dist"],
   "rules": {
     "@typescript-eslint/consistent-type-imports": [
       2,
