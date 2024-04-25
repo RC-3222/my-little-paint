@@ -1,18 +1,12 @@
 @use "../../scss" as *;
 
-.button {
-    box-sizing: border-box;
-    background-color: $clr-primary;
-    color: $clr-secondary;
-    border: none;
-    padding: 0.25rem 0.375rem;
+.input {
+    border: 2px solid $clr-primary;
+
+    padding: 0.25rem;
     border-radius: 4px;
 
     font-size: 1.25rem;
-
-    transition:
-        background-color 250ms,
-        outline-color 250ms;
 
     &:focus-visible {
         outline: 2px solid $clr-primary;
@@ -20,7 +14,7 @@
     }
 
     &:hover {
-        background-color: lighten($clr-primary, 8);
+        border-color: lighten($clr-primary, 8);
 
         &:focus-visible {
             outline-color: lighten($clr-primary, 8);

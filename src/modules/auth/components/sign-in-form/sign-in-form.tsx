@@ -1,18 +1,16 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useAppDispatch } from "../../../../store/hooks"
+import { Link } from "react-router-dom"
 import { Routes } from "../../../../shared/constants"
-import { Button } from "../../../../shared/components"
-import { Card } from "../../../../shared/components"
-import type { FormEvent } from "react";
+import type { FormEvent} from "react";
 import { useState } from "react"
-import { signUpWithEmailAndPass } from "../../../../firebase/api"
-import { isPasswordValid, isEmailValid } from "../../utils"
+import { Card, Button } from "../../../../shared/components"
 import { FormInput } from "../form-input/form-input"
-
-import styles from "./sign-up-form.module.scss"
+import { isEmailValid, isPasswordValid } from "../../utils"
 import { Form } from "../form"
 
-export const SignUpForm = () => {
+import styles from "./sign-in-form.module.scss"
+import { signInWithEmailAndPass } from "../../../../firebase/api"
+
+export const SignInForm = () => {
     const [password, setPassword] = useState("")
     const [passwordError, setPasswordError] = useState("")
 
@@ -31,7 +29,7 @@ export const SignUpForm = () => {
 
     const authenticate = async () => {
         try {
-            await signUpWithEmailAndPass(email, password)
+            await signInWithEmailAndPass(email, password)
         } catch (err) {
             console.error(err)
         }
@@ -59,7 +57,7 @@ export const SignUpForm = () => {
     return (
         <Card className={styles.container}>
             <Form onSubmit={handleSubmit}>
-                <h2>Sign Up Form</h2>
+                <h2>Sign In Form</h2>
                 <FormInput
                     label="Email"
                     type="text"
@@ -77,11 +75,12 @@ export const SignUpForm = () => {
                     validate={validatePassword}
                 />
                 <Button className={styles.submitButton} type="submit">
-                    Sign Up
+                    Sign In
                 </Button>
             </Form>
             <span>
-                Already have an account? <Link to={Routes.SignIn}>Sign In</Link>
+                Don't have an account yet?{" "}
+                <Link to={Routes.SignUp}>Sign up</Link>
             </span>
         </Card>
     )

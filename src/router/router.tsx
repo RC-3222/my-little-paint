@@ -1,8 +1,17 @@
-import { createHashRouter, Navigate, RouterProvider } from "react-router-dom"
-import { ProtectedRoute } from "../modules/auth"
+import {
+    createHashRouter,
+    Navigate,
+    RouterProvider,
+    useNavigate,
+} from "react-router-dom"
+import { ProtectedRoute, signIn, signOut } from "../modules/auth"
 import { SignUp, SignIn, Editor, Main } from "../pages"
 
 import { Routes } from "../shared/constants"
+import { useEffect } from "react"
+import { onAuthStateChanged } from "firebase/auth"
+import { auth } from "../firebase/firebase"
+import { useAppDispatch } from "../store"
 
 const router = createHashRouter([
     {
@@ -36,5 +45,17 @@ const router = createHashRouter([
 ])
 
 export const AppRouterProvider = () => {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, user => {
+            if (user) {
+                dispatch(signIn(user.email as string))
+            } else dispatch(signOut())
+        })
+
+        return () => unsubscribe()
+    }, [])
+
     return <RouterProvider router={router} />
 }

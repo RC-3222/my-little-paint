@@ -2,10 +2,10 @@ import type { PropsWithChildren } from "react"
 import { useLocation, Navigate } from "react-router-dom"
 import { Routes } from "../../../../shared/constants"
 import { useAppSelector } from "../../../../store/hooks"
-import { selectIsAuthorized } from "../.."
+import { selectUser } from "../.."
 
 export const ProtectedRoute = ({ children }: PropsWithChildren) => {
-    const auth = useAppSelector(selectIsAuthorized)
+    const auth = useAppSelector(selectUser)
     const location = useLocation()
 
     if (!auth) {
