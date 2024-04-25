@@ -1,29 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 export interface CounterSliceState {
-    isAuthorized: boolean
+    user: string | null
 }
 
 const initialState: CounterSliceState = {
-    isAuthorized: false,
+    user: localStorage.getItem("user") ?? null,
 }
 
 export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: create => ({
-        signIn: create.reducer(state => {
-            state.isAuthorized = true
+        signIn: create.reducer((state, action: { payload: string }) => {
+            localStorage.setItem("user", action.payload)
+            state.user = action.payload
         }),
         signOut: create.reducer(state => {
-            state.isAuthorized = false
+            localStorage.removeItem("user")
+            state.user = null
         }),
     }),
     selectors: {
-        selectIsAuthorized: auth => auth.isAuthorized,
+        selectUser: auth => auth.user,
     },
 })
 
 export const { signIn, signOut } = authSlice.actions
 
-export const { selectIsAuthorized } = authSlice.selectors
+export const { selectUser } = authSlice.selectors
