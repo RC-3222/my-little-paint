@@ -1,3 +1,5 @@
+import { MainLayout } from "../../modules/main"
+
 export const Main = () => {
-  return <div>Main</div>
+    return <MainLayout />
 }
