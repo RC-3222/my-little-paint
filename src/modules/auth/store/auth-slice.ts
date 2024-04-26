@@ -5,7 +5,7 @@ export interface CounterSliceState {
 }
 
 const initialState: CounterSliceState = {
-    user: null,
+    user: localStorage.getItem("user") ?? null,
 }
 
 export const authSlice = createSlice({
@@ -13,9 +13,11 @@ export const authSlice = createSlice({
     initialState,
     reducers: create => ({
         signIn: create.reducer((state, action: { payload: string }) => {
+            localStorage.setItem("user", action.payload)
             state.user = action.payload
         }),
         signOut: create.reducer(state => {
+            localStorage.removeItem("user")
             state.user = null
         }),
     }),

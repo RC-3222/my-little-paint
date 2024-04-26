@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { Routes } from "../../../../shared/constants"
-import type { FormEvent} from "react";
+import type { FormEvent } from "react"
 import { useState } from "react"
 import { Card, Button } from "../../../../shared/components"
 import { FormInput } from "../form-input/form-input"

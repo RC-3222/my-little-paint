@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../../../store/hooks"
 import { Routes } from "../../../../shared/constants"
 import { Button } from "../../../../shared/components"
 import { Card } from "../../../../shared/components"
-import type { FormEvent } from "react";
+import type { FormEvent } from "react"
 import { useState } from "react"
 import { signUpWithEmailAndPass } from "../../../../firebase/api"
 import { isPasswordValid, isEmailValid } from "../../utils"

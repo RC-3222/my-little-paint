@@ -18,8 +18,8 @@ export const AuthLayout = ({ type }: AuthLayoutProps) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (user) navigate(Routes.Main)
-    }, [user])
+        if (user) navigate(Routes.Main, { replace: true })
+    }, [user, navigate])
 
     return (
         <main className={styles.main}>
