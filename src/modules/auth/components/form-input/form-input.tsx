@@ -2,47 +2,35 @@ import classNames from "classnames"
 import { Input } from "../../../../shared"
 
 import styles from "./form-input.module.scss"
-import type { ChangeEventHandler, FocusEventHandler } from "react"
+import type { FieldError, UseFormRegister } from "react-hook-form"
+import type { FormSchemaType } from "../../schemas"
 
 type FormInputProps = {
     type: "text" | "password"
     label: string
-    error?: string
-    value: string
-    onChange: (newValue: string) => void
-    validate: (newValue: string) => void
+    error?: FieldError
+    register: UseFormRegister<FormSchemaType>
+    name: keyof FormSchemaType
 }
 
 export const FormInput = ({
     type,
     label,
     error,
-    value,
-    onChange,
-    validate,
+    name,
+    register,
 }: FormInputProps) => {
     const inputStyles = classNames({ [styles.input_error]: !!error })
-
-    const inputChangeHandler: ChangeEventHandler<HTMLInputElement> = e => {
-        onChange(e.target.value)
-        validate(e.target.value)
-    }
-
-    const inputBlurHandler: FocusEventHandler<HTMLInputElement> = e => {
-        validate(e.target.value)
-    }
 
     return (
         <label className={styles.container}>
             <span className={styles.label}>{label}</span>
             <Input
-                onBlur={inputBlurHandler}
-                onChange={inputChangeHandler}
-                value={value}
                 className={inputStyles}
                 type={type}
+                {...register(name, { pattern: /d+/ })}
             />
-            {!!error && <span className={styles.error}>{error}</span>}
+            {!!error && <span className={styles.error}>{error.message}</span>}
         </label>
     )
 }

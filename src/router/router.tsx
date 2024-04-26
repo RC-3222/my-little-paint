@@ -1,17 +1,8 @@
-import {
-    createHashRouter,
-    Navigate,
-    RouterProvider,
-    useNavigate,
-} from "react-router-dom"
-import { ProtectedRoute, signIn, signOut } from "../modules/auth"
+import { createHashRouter, Navigate, RouterProvider } from "react-router-dom"
+import { ProtectedRoute } from "../modules/auth"
 import { SignUp, SignIn, Editor, Main } from "../pages"
 
 import { Routes } from "../shared/constants"
-import { useEffect } from "react"
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "../firebase/firebase"
-import { useAppDispatch } from "../store"
 
 const router = createHashRouter([
     {
@@ -23,39 +14,25 @@ const router = createHashRouter([
         element: <SignIn />,
     },
     {
-        path: Routes.Main,
-        element: (
-            <ProtectedRoute>
-                <Main />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: Routes.Editor,
-        element: (
-            <ProtectedRoute>
-                <Editor />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: Routes.Fallback,
-        element: <Navigate to={Routes.Main} replace />,
+        path: Routes.Root,
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: Routes.Main,
+                element: <Main />,
+            },
+            {
+                path: Routes.Editor,
+                element: <Editor />,
+            },
+            {
+                path: Routes.Any,
+                element: <Navigate to={Routes.Main} replace />,
+            },
+        ],
     },
 ])
 
 export const AppRouterProvider = () => {
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => {
-            if (user) {
-                dispatch(signIn(user.email as string))
-            } else dispatch(signOut())
-        })
-
-        return () => unsubscribe()
-    }, [])
-
     return <RouterProvider router={router} />
 }

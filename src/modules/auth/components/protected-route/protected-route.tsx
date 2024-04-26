@@ -1,11 +1,10 @@
-import type { PropsWithChildren } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { Routes } from "../../../../shared/constants"
 import { useAppSelector } from "../../../../store/hooks"
 import { selectUser } from "../.."
 
-export const ProtectedRoute = ({ children }: PropsWithChildren) => {
+export const ProtectedRoute = () => {
     const user = useAppSelector(selectUser)
 
-    return user ? children : <Navigate to={Routes.SignIn} replace />
+    return user ? <Outlet /> : <Navigate to={Routes.SignIn} replace />
 }

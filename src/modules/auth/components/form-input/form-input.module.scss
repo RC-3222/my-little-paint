@@ -13,4 +13,28 @@
     border-radius: 6px;
 
     background-color: lighten(desaturate($clr-primary, 30), 40);
+
+    &:has(.error) {
+        border-color: $clr-danger;
+        background-color: lighten(desaturate($clr-danger, 30), 40);
+    }
+}
+
+.error {
+    color: $clr-danger;
+}
+
+.input_error {
+    border-color: $clr-danger;
+
+    &:focus-visible {
+        outline-color: $clr-danger;
+    }
+
+    &:hover {
+        border-color: lighten($clr-danger, 8);
+        &:focus-visible {
+            outline-color: lighten($clr-danger, 8);
+        }
+    }
 }

@@ -1,4 +1,9 @@
-import { combineSlices, configureStore } from "@reduxjs/toolkit"
+import {
+    type Action,
+    type ThunkAction,
+    combineSlices,
+    configureStore,
+} from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { authSlice } from "../modules/auth/store/auth-slice"
 
@@ -18,3 +23,10 @@ export const store = makeStore()
 
 export type AppStore = typeof store
 export type AppDispatch = AppStore["dispatch"]
+
+export type AppThunk<ThunkReturnType = void> = ThunkAction<
+    ThunkReturnType,
+    RootState,
+    unknown,
+    Action
+>

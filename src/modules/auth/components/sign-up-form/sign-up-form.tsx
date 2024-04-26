@@ -1,80 +1,51 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useAppDispatch } from "../../../../store/hooks"
+import { Link } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks"
 import { Routes } from "../../../../shared/constants"
 import { Button } from "../../../../shared/components"
 import { Card } from "../../../../shared/components"
-import type { FormEvent } from "react"
-import { useState } from "react"
-import { signUpWithEmailAndPass } from "../../../../firebase/api"
-import { isPasswordValid, isEmailValid } from "../../utils"
 import { FormInput } from "../form-input/form-input"
 
 import styles from "./sign-up-form.module.scss"
 import { Form } from "../form"
+import { selectError, signUp } from "../../store"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { type FormSchemaType, FormSchema } from "../../schemas"
 
 export const SignUpForm = () => {
-    const [password, setPassword] = useState("")
-    const [passwordError, setPasswordError] = useState("")
+    const error = useAppSelector(selectError)
 
-    const [email, setEmail] = useState("")
-    const [emailError, setEmailError] = useState("")
+    const dispatch = useAppDispatch()
 
-    const validatePassword = (val: string) => {
-        if (!isPasswordValid(val)) setPasswordError("Password error")
-        else setPasswordError("")
-    }
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormSchemaType>({
+        resolver: zodResolver(FormSchema),
+    })
 
-    const validateEmail = (val: string) => {
-        if (!isEmailValid(val)) setEmailError("Email error")
-        else setEmailError("")
-    }
-
-    const authenticate = async () => {
-        try {
-            await signUpWithEmailAndPass(email, password)
-        } catch (err) {
-            console.error(err)
-        }
-    }
-
-    const handleSubmit = (ev: FormEvent) => {
-        ev.preventDefault()
-
-        validatePassword(password)
-        validateEmail(email)
-
-        if (passwordError || emailError) return
-
-        authenticate()
-    }
-
-    const passwordInputChangeHandler = (val: string) => {
-        setPassword(val)
-    }
-
-    const emailInputChangeHandler = (val: string) => {
-        setEmail(val)
+    const onSubmit = ({ email, password }: FormSchemaType) => {
+        dispatch(signUp({ email, password }))
     }
 
     return (
         <Card className={styles.container}>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
                 <h2>Sign Up Form</h2>
                 <FormInput
                     label="Email"
                     type="text"
-                    error={emailError}
-                    value={email}
-                    onChange={emailInputChangeHandler}
-                    validate={validateEmail}
+                    name="email"
+                    error={errors.email}
+                    register={register}
                 />
                 <FormInput
                     label="Password"
                     type="password"
-                    error={passwordError}
-                    value={password}
-                    onChange={passwordInputChangeHandler}
-                    validate={validatePassword}
+                    error={errors.password}
+                    name="password"
+                    register={register}
                 />
                 <Button className={styles.submitButton} type="submit">
                     Sign Up
@@ -83,6 +54,7 @@ export const SignUpForm = () => {
             <span>
                 Already have an account? <Link to={Routes.SignIn}>Sign In</Link>
             </span>
+            {error && <span>{error}</span>}
         </Card>
     )
 }

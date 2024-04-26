@@ -3,5 +3,6 @@ export const enum Routes {
     SignUp = "/sign-up",
     Main = "/main",
     Editor = "/editor",
-    Fallback = "/*",
+    Any = "/*",
+    Root = "/",
 }
