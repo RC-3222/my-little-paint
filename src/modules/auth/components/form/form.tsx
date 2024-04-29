@@ -1,47 +1,37 @@
-import styles from "./form.module.scss"
+import type { DefaultValues, FieldValues, SubmitHandler } from "react-hook-form"
 import { FormProvider, useForm } from "react-hook-form"
-import { Button, Card } from "@appShared/components"
 import { type ReactNode, type PropsWithChildren } from "react"
-import type { TypeOf } from "zod"
-import { type ZodSchema } from "zod"
+import type { ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-type FormProps<T extends ZodSchema<any>> = PropsWithChildren & {
-    schema: T
-    onSubmit: (props: TypeOf<T>) => void
+type FormProps<T extends FieldValues> = PropsWithChildren & {
+    schema: ZodType<T>
+    onSubmit: SubmitHandler<T>
     additionalContent?: ReactNode | ReactNode[]
-    defaultValues?: TypeOf<T>
-    title: string
+    defaultValues?: DefaultValues<T>
+    className?: string
 }
 
-export const Form = <T extends ZodSchema<any>>({
+export const Form = <T extends FieldValues>({
     children,
     schema,
     onSubmit,
-    additionalContent,
     defaultValues,
-    title,
+    className,
 }: FormProps<T>) => {
-    const { ...methods } = useForm<TypeOf<typeof schema>>({
+    const { ...methods } = useForm<T>({
         resolver: zodResolver(schema),
         defaultValues,
     })
 
     return (
         <FormProvider {...methods}>
-            <Card className={styles.container}>
-                <form
-                    className={styles.form}
-                    onSubmit={methods.handleSubmit(onSubmit)}
-                >
-                    <h2>{title}</h2>
-                    {children}
-                    <Button className={styles.submitButton} type="submit">
-                        Sign Up
-                    </Button>
-                </form>
-                {additionalContent}
-            </Card>
+            <form
+                className={className}
+                onSubmit={methods.handleSubmit(onSubmit)}
+            >
+                {children}
+            </form>
         </FormProvider>
     )
 }

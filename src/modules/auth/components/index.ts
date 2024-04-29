@@ -1,4 +1,4 @@
 export { AuthLayout } from "./auth-layout"
-export { Form } from "./form"
-export { FormInput } from "./form-input"
+export { SignUpForm } from "./sign-up-form"
+export { SignInForm } from "./sign-in-form"
 export { ProtectedRoute } from "./protected-route"
