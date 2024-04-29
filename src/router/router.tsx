@@ -1,10 +1,10 @@
-import { createHashRouter, Navigate, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import { ProtectedRoute } from "@appModules/auth"
 import { SignUp, SignIn, Editor, Main } from "../pages"
 
 import { Routes } from "@appShared/constants"
 
-const router = createHashRouter(
+const router = createBrowserRouter(
     [
         {
             path: Routes.SignUp,
