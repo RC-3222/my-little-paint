@@ -1,13 +1,12 @@
 import type { DefaultValues, FieldValues, SubmitHandler } from "react-hook-form"
 import { FormProvider, useForm } from "react-hook-form"
-import { type ReactNode, type PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
 import type { ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 type FormProps<T extends FieldValues> = PropsWithChildren & {
     schema: ZodType<T>
     onSubmit: SubmitHandler<T>
-    additionalContent?: ReactNode | ReactNode[]
     defaultValues?: DefaultValues<T>
     className?: string
 }
