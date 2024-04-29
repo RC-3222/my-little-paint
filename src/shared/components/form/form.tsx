@@ -1,14 +1,16 @@
 import type { DefaultValues, FieldValues, SubmitHandler } from "react-hook-form"
 import { FormProvider, useForm } from "react-hook-form"
-import { type PropsWithChildren } from "react"
+import type { ComponentPropsWithoutRef } from "react"
 import type { ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-type FormProps<T extends FieldValues> = PropsWithChildren & {
+type FormProps<T extends FieldValues> = Omit<
+    ComponentPropsWithoutRef<"form">,
+    "onSubmit"
+> & {
     schema: ZodType<T>
     onSubmit: SubmitHandler<T>
     defaultValues?: DefaultValues<T>
-    className?: string
 }
 
 export const Form = <T extends FieldValues>({
@@ -17,6 +19,7 @@ export const Form = <T extends FieldValues>({
     onSubmit,
     defaultValues,
     className,
+    ...props
 }: FormProps<T>) => {
     const { ...methods } = useForm<T>({
         resolver: zodResolver(schema),
@@ -26,6 +29,7 @@ export const Form = <T extends FieldValues>({
     return (
         <FormProvider {...methods}>
             <form
+                {...props}
                 className={className}
                 onSubmit={methods.handleSubmit(onSubmit)}
             >
