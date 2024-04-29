@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import { Input } from "../../../../shared"
+import { Input } from "@appShared/components"
 
 import styles from "./form-input.module.scss"
 import type { FieldError, UseFormRegister } from "react-hook-form"

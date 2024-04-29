@@ -10,5 +10,4 @@ export const FormSchema = z.object({
         .min(6, { message: "Password must be at least 6 characters" }),
 })
 
-//extract the inferred type from schema
 export type FormSchemaType = z.infer<typeof FormSchema>

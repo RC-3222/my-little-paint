@@ -5,7 +5,7 @@ import {
     configureStore,
 } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import { authSlice } from "../modules/auth/store/auth-slice"
+import { authSlice } from "@appModules/auth"
 
 const rootReducer = combineSlices(authSlice)
 export type RootState = ReturnType<typeof rootReducer>

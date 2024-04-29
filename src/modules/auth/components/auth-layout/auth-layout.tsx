@@ -6,8 +6,8 @@ import styles from "./auth-layout.module.scss"
 import { useAppSelector } from "../../../../store"
 import { AuthReqState, selectStatus, selectUser } from "../../store"
 import { useEffect } from "react"
-import { Routes } from "../../../../shared"
-import { GlobalLoader } from "../../../../shared/components/global-loader"
+import { Routes } from "@appShared/constants"
+import { GlobalLoader } from "@appShared/components"
 
 type AuthLayoutProps = {
     type: "sign-in" | "sign-up"

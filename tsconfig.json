@@ -15,7 +15,16 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-        "types": ["vitest/globals"]
+        "types": ["vitest/globals"],
+        "baseUrl": "./",
+        "paths": {
+            "@": ["src"],
+            "@appShared/*": ["src/shared/*"],
+            "@appModules/*": ["src/modules/*"],
+            "@appStore": ["src/store"],
+            "@appStore/*": ["src/store/*"],
+            "@appFirebase/*": ["src/firebase/*"]
+        }
     },
     "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,20 +1,17 @@
 import { Link } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks"
-import { Routes } from "../../../../shared/constants"
-import { Button } from "../../../../shared/components"
-import { Card } from "../../../../shared/components"
+import { Routes } from "@appShared/constants"
+import { Button, Card } from "@appShared/components"
 import { FormInput } from "../form-input/form-input"
 
 import styles from "./sign-up-form.module.scss"
 import { Form } from "../form"
-import { selectError, signUp } from "../../store"
+import { signUp } from "../../store"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAppDispatch } from "@appStore"
 import { useForm } from "react-hook-form"
 import { type FormSchemaType, FormSchema } from "../../schemas"
 
 export const SignUpForm = () => {
-    const error = useAppSelector(selectError)
-
     const dispatch = useAppDispatch()
 
     const {
@@ -54,7 +51,6 @@ export const SignUpForm = () => {
             <span>
                 Already have an account? <Link to={Routes.SignIn}>Sign In</Link>
             </span>
-            {error && <span>{error}</span>}
         </Card>
     )
 }

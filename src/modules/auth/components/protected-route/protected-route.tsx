@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom"
-import { Routes } from "../../../../shared/constants"
-import { useAppSelector } from "../../../../store/hooks"
+import { useAppSelector } from "@appStore"
+import { Routes } from "@appShared/constants"
 import { selectUser } from "../.."
 
 export const ProtectedRoute = () => {
