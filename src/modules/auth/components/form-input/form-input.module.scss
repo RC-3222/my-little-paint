@@ -1,0 +1,44 @@
+@use "@appShared/scss" as *;
+
+.container {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+
+    border: 2px solid $clr-primary;
+
+    padding: 0.5rem;
+    border-radius: 6px;
+
+    background-color: lighten(desaturate($clr-primary, 30), 40);
+
+    &:has(.error) {
+        border-color: $clr-danger;
+        background-color: lighten(desaturate($clr-danger, 30), 40);
+    }
+}
+
+.label {
+    font-weight: 500;
+}
+
+.error {
+    color: $clr-danger;
+}
+
+.input_error {
+    border-color: $clr-danger;
+
+    &:focus-visible {
+        outline-color: $clr-danger;
+    }
+
+    &:hover {
+        border-color: lighten($clr-danger, 8);
+        &:focus-visible {
+            outline-color: lighten($clr-danger, 8);
+        }
+    }
+}

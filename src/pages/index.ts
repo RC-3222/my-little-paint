@@ -1,4 +1,3 @@
-export { SignUp } from "./sign-up"
-export { SignIn } from "./sign-in"
+export * from "./auth"
 export { Main } from "./main"
 export { Editor } from "./editor"

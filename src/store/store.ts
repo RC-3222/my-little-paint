@@ -1,20 +1,32 @@
-import { combineSlices, configureStore } from "@reduxjs/toolkit"
+import {
+    type Action,
+    type ThunkAction,
+    combineSlices,
+    configureStore,
+} from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import { authSlice } from "./slices/auth-slice"
+import { authSlice } from "@appModules/auth"
 
 const rootReducer = combineSlices(authSlice)
 export type RootState = ReturnType<typeof rootReducer>
 
 export const makeStore = (preloadedState?: Partial<RootState>) => {
-  const store = configureStore({
-    reducer: rootReducer,
-    preloadedState,
-  })
-  setupListeners(store.dispatch)
-  return store
+    const store = configureStore({
+        reducer: rootReducer,
+        preloadedState,
+    })
+    setupListeners(store.dispatch)
+    return store
 }
 
 export const store = makeStore()
 
 export type AppStore = typeof store
 export type AppDispatch = AppStore["dispatch"]
+
+export type AppThunk<ThunkReturnType = void> = ThunkAction<
+    ThunkReturnType,
+    RootState,
+    unknown,
+    Action
+>

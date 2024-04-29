@@ -1,0 +1,9 @@
+.loader {
+    width: max(80px, min(10vw, 10vh));
+    height: max(80px, min(10vw, 10vh));
+
+    &::after {
+        width: max(64px, min(8vw, 8vh));
+        height: max(64px, min(8vw, 8vh));
+    }
+}

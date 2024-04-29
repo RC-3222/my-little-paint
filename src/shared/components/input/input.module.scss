@@ -1,0 +1,23 @@
+@use "../../scss" as *;
+
+.input {
+    border: 2px solid $clr-primary;
+
+    padding: 0.25rem;
+    border-radius: 4px;
+
+    font-size: 1.25rem;
+
+    &:focus-visible {
+        outline: 2px solid $clr-primary;
+        outline-offset: 1px;
+    }
+
+    &:hover {
+        border-color: lighten($clr-primary, 8);
+
+        &:focus-visible {
+            outline-color: lighten($clr-primary, 8);
+        }
+    }
+}

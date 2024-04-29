@@ -1,3 +1,5 @@
+import { EditorLayout } from "../../modules/editor"
+
 export const Editor = () => {
-  return <div>Editor</div>
+    return <EditorLayout />
 }

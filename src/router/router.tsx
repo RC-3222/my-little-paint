@@ -1,58 +1,43 @@
-import { Navigate, RouterProvider, createHashRouter } from "react-router-dom"
-import { Main, Editor, SignIn, SignUp } from "../pages"
-import { MainLayout } from "../components/main-layout"
-import { ProtectedRoute } from "./protected-route"
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
+import { ProtectedRoute } from "@appModules/auth"
+import { SignUp, SignIn, Editor, Main } from "../pages"
 
-export const enum Routes {
-  Root = "/",
-  SignIn = "/sign-in",
-  SignUp = "/sign-up",
-  Main = "/main",
-  Editor = "/editor",
-  Fallback = "/*",
-}
+import { Routes } from "@appShared/constants"
 
-const router = createHashRouter([
-  {
-    path: Routes.Root,
-    element: <MainLayout />,
-    children: [
-      {
-        path: Routes.Root,
-        element: <Navigate to={Routes.Main} replace />,
-      },
-      {
-        path: Routes.SignUp,
-        element: <SignUp />,
-      },
-      {
-        path: Routes.SignIn,
-        element: <SignIn />,
-      },
-      {
-        path: Routes.Main,
-        element: (
-          <ProtectedRoute>
-            <Main />
-          </ProtectedRoute>
-        ),
-      },
+const router = createBrowserRouter(
+    [
+        {
+            path: Routes.SignUp,
+            element: <SignUp />,
+        },
+        {
+            path: Routes.SignIn,
+            element: <SignIn />,
+        },
+        {
+            path: Routes.Root,
+            element: <ProtectedRoute />,
+            children: [
+                {
+                    path: Routes.Main,
+                    element: <Main />,
+                },
+                {
+                    path: Routes.Editor,
+                    element: <Editor />,
+                },
+                {
+                    path: Routes.Root,
+                    element: <Navigate to={Routes.Main} replace />,
+                },
+                {
+                    path: Routes.Fallback,
+                    element: <Navigate to={Routes.Main} replace />,
+                },
+            ],
+        },
     ],
-  },
-  {
-    path: Routes.Editor,
-    element: (
-      <ProtectedRoute>
-        <Editor />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: Routes.Fallback,
-    element: <Navigate to={Routes.Main} replace />,
-  },
-])
+    {},
+)
 
-export const AppRouterProvider = () => {
-  return <RouterProvider router={router} />
-}
+export const AppRouterProvider = () => <RouterProvider router={router} />
