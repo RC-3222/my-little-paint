@@ -8,3 +8,16 @@
     flex-direction: column;
     align-items: center;
 }
+
+.container {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    gap: 1rem;
+}
+
+.submitButton {
+    width: min(12rem, 100%);
+}

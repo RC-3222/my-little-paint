@@ -1,3 +1,3 @@
 export * from "./store"
-export { ProtectedRoute } from "./components/protected-route"
-export { AuthLayout } from "./components/auth-layout"
+export * from "./components"
+export * from "./schemas"

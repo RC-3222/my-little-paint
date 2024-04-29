@@ -1,19 +1,14 @@
 import { useNavigate } from "react-router-dom"
-import { SignInForm } from "../sign-in-form"
-import { SignUpForm } from "../sign-up-form"
 
 import styles from "./auth-layout.module.scss"
 import { useAppSelector } from "../../../../store"
 import { AuthReqState, selectStatus, selectUser } from "../../store"
-import { useEffect } from "react"
 import { Routes } from "@appShared/constants"
 import { GlobalLoader } from "@appShared/components"
+import type { PropsWithChildren } from "react"
+import { useEffect } from "react"
 
-type AuthLayoutProps = {
-    type: "sign-in" | "sign-up"
-}
-
-export const AuthLayout = ({ type }: AuthLayoutProps) => {
+export const AuthLayout = ({ children }: PropsWithChildren) => {
     const user = useAppSelector(selectUser)
 
     const status = useAppSelector(selectStatus)
@@ -26,7 +21,7 @@ export const AuthLayout = ({ type }: AuthLayoutProps) => {
 
     return (
         <main className={styles.main}>
-            {type === "sign-in" ? <SignInForm /> : <SignUpForm />}
+            {children}
             {status === AuthReqState.Pending && <GlobalLoader />}
         </main>
     )
