@@ -1,7 +1,14 @@
+import { DrawingArea } from "../drawing-area"
+
 export const EditorLayout = () => {
     return (
-        <main>
-            <div>Editor</div>
-        </main>
+        <>
+            <header>
+                <h2>Editor</h2>
+            </header>
+            <main style={{ backgroundColor: "red", padding: "10px" }}>
+                <DrawingArea />
+            </main>
+        </>
     )
 }
