@@ -2,9 +2,15 @@ import type { PropsWithChildren } from "react"
 import { useEffect } from "react"
 import { createPortal } from "react-dom"
 
+import classNames from "classnames"
+
 import styles from "./backdrop.module.scss"
 
-export const Backdrop = ({ children }: PropsWithChildren) => {
+type BackdropProps = PropsWithChildren & {
+    className?: string
+}
+
+export const Backdrop = ({ children, className }: BackdropProps) => {
     useEffect(() => {
         document.body.classList.add(styles.backdropContainer)
 
@@ -12,7 +18,9 @@ export const Backdrop = ({ children }: PropsWithChildren) => {
     })
 
     return createPortal(
-        <div className={styles.backdrop}>{children}</div>,
+        <div className={classNames(styles.backdrop, className)}>
+            {children}
+        </div>,
         document.body,
     )
 }

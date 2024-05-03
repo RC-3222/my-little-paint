@@ -5,3 +5,6 @@ export { Input } from "./input"
 
 export { Loader } from "./loader"
 export { GlobalLoader } from "./global-loader"
+
+export { FormInput } from "./form-input"
+export { FormSubmitButton } from "./form-submit-button"

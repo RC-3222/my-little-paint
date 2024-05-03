@@ -1,2 +1,3 @@
 export { getCursorPosition } from "./get-cursor-position"
-export { draw } from "./draw"
+export { drawBrush } from "./drawing/draw-brush"
+export {}

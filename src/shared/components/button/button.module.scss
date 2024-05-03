@@ -10,6 +10,8 @@
 
     font-size: 1.25rem;
 
+    cursor: pointer;
+
     transition:
         background-color 250ms,
         outline-color 250ms;
@@ -24,6 +26,15 @@
 
         &:focus-visible {
             outline-color: lighten($clr-primary, 8);
+        }
+    }
+
+    &:disabled {
+        cursor: default;
+
+        &:hover,
+        &:focus-visible {
+            background-color: lighten(desaturate($clr-primary, 12), 8);
         }
     }
 }

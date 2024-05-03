@@ -1,6 +1,6 @@
 type Args = {
-    previousX?: number
-    previousY?: number
+    startX?: number
+    startY?: number
     currentX: number
     currentY: number
     context: CanvasRenderingContext2D | null | undefined
@@ -8,9 +8,9 @@ type Args = {
     brushSize: number
 }
 
-export function draw({
-    previousX,
-    previousY,
+export function drawBrush({
+    startX,
+    startY,
     currentX,
     currentY,
     context,
@@ -26,9 +26,9 @@ export function draw({
     context.arc(currentX, currentY, brushSize, 0, 2 * Math.PI)
     context.fill()
 
-    if (previousX && previousY) {
+    if (startX && startY) {
         context.beginPath()
-        context.moveTo(previousX, previousY)
+        context.moveTo(startX, startY)
         context.lineTo(currentX, currentY)
         context.lineWidth = brushSize * 2
         context.stroke()
