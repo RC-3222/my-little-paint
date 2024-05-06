@@ -1,12 +1,9 @@
 import { storage, db } from "@appFirebase/firebase"
-import { TOAST_TIMEOUT } from "@appShared"
 import { createErrorToast } from "@appShared/utils"
 import type { User } from "firebase/auth"
 import { addDoc, collection } from "firebase/firestore"
 import { ref, uploadString, getDownloadURL } from "firebase/storage"
 import { useState } from "react"
-import { toast } from "react-toastify"
-//import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from "uuid"
 
 export function useSaveImage(user: User | null) {
@@ -40,9 +37,9 @@ export function useSaveImage(user: User | null) {
             createErrorToast(errorMessage, "saveImgError")
 
             console.error(e)
+        } finally {
+            setIsLoading(false)
         }
-
-        setIsLoading(false)
     }
 
     return { saveImage, isLoading }

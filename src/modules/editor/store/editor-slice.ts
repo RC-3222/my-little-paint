@@ -74,10 +74,10 @@ export const editorSlice = createSlice({
             state.brushSize = Math.max(MIN_BRUSH_SIZE, state.brushSize - 0.5)
         }),
         increaseStrokeSize: create.reducer(state => {
-            state.strokeSize = Math.min(MAX_STROKE_SIZE, state.brushSize + 0.5)
+            state.strokeSize = Math.min(MAX_STROKE_SIZE, state.strokeSize + 0.5)
         }),
         decreaseStrokeSize: create.reducer(state => {
-            state.strokeSize = Math.max(MIN_STROKE_SIZE, state.brushSize - 0.5)
+            state.strokeSize = Math.max(MIN_STROKE_SIZE, state.strokeSize - 0.5)
         }),
         setBrushSize: create.reducer((state, action: PayloadAction<number>) => {
             state.brushSize = Math.max(

@@ -1,200 +1,114 @@
-import { useAppDispatch, useAppSelector } from "@appStore"
-import type { PointerEventHandler } from "react"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { useAppSelector } from "@appStore"
+import type { PointerEventHandler, MutableRefObject, RefObject } from "react"
+import { useCallback } from "react"
 import { drawBrush, drawShape, getPointerPosition } from "../utils"
 import {
-    increaseBrushSize,
-    decreaseBrushSize,
     selectShapeClass,
     selectBrushSize,
     selectFillColor,
     selectStrokeColor,
     selectStrokeSize,
-    increaseStrokeSize,
-    decreaseStrokeSize,
 } from "../store"
 
-type CanvasData = {
-    startX?: number
-    startY?: number
-    currentX?: number
-    currentY?: number
-    isDrawing: boolean
+import type { CanvasData } from "../types"
+
+type Args = {
+    canvasDataRef: MutableRefObject<CanvasData>
+    mainCanvasRef: RefObject<HTMLCanvasElement>
+    previewCanvasRef: RefObject<HTMLCanvasElement>
 }
 
-export const useCanvas = () => {
-    const mainCanvasRef = useRef<HTMLCanvasElement>(null)
-    const previewCanvasRef = useRef<HTMLCanvasElement>(null)
-
-    const canvData = useRef<CanvasData>({ isDrawing: false })
-
+export const useCanvas = ({
+    canvasDataRef,
+    mainCanvasRef,
+    previewCanvasRef,
+}: Args) => {
     const ShapeClass = useAppSelector(selectShapeClass)
     const brushSize = useAppSelector(selectBrushSize)
     const fillColor = useAppSelector(selectFillColor)
     const strokeColor = useAppSelector(selectStrokeColor)
     const strokeSize = useAppSelector(selectStrokeSize)
 
-    const dispatch = useAppDispatch()
-
     const hasShapeClass = !!ShapeClass
 
-    const pointerDownHandler = useMemo<
+    const pointerDownBrushHandler = useCallback<
         PointerEventHandler<HTMLCanvasElement>
-    >(() => {
-        if (!hasShapeClass) {
-            return e => {
-                const canvasElem = mainCanvasRef.current
-                if (!canvasElem) return
-                const context = canvasElem.getContext("2d")
-                const { x, y } = getPointerPosition(e, canvasElem)
-                drawBrush({
-                    currentX: x,
-                    currentY: y,
-                    context,
-                    brushColor: fillColor,
-                    brushSize,
-                })
-                canvData.current.startX = x
-                canvData.current.startY = y
+    >(
+        e => {
+            const canvasElem = mainCanvasRef.current
+            if (!canvasElem) return
+            const context = canvasElem.getContext("2d")
+            const { x, y } = getPointerPosition(e, canvasElem)
+            drawBrush({
+                currentX: x,
+                currentY: y,
+                context,
+                brushColor: fillColor,
+                brushSize,
+            })
+            canvasDataRef.current.startX = x
+            canvasDataRef.current.startY = y
 
-                canvData.current.isDrawing = true
-            }
-        } else {
-            return e => {
-                const canvasElem = mainCanvasRef.current
-                const previewElem = previewCanvasRef.current
+            canvasDataRef.current.isDrawing = true
+        },
+        [brushSize, canvasDataRef, fillColor, mainCanvasRef],
+    )
 
-                if (!canvasElem || !previewElem) return
-
-                const { x, y } = getPointerPosition(e, canvasElem)
-
-                canvData.current.startX = x
-                canvData.current.startY = y
-
-                canvData.current.isDrawing = true
-            }
-        }
-    }, [hasShapeClass, fillColor, brushSize])
-
-    const cancelDrawing = useCallback(() => {
-        canvData.current = { isDrawing: false }
-
-        const previewElem = previewCanvasRef.current
-
-        if (!previewElem) return
-
-        const previewCtx = previewElem.getContext("2d")
-
-        if (!previewCtx) return
-
-        previewCtx.clearRect(0, 0, previewElem.width, previewElem.height)
-    }, [])
-
-    const stopDrawingHandler = useMemo<
+    const pointerDownShapeHandler = useCallback<
         PointerEventHandler<HTMLCanvasElement>
-    >(() => {
-        if (!ShapeClass) {
-            return e => {
-                if (canvData.current.isDrawing)
-                    canvData.current = { isDrawing: false }
-            }
-        } else {
-            return e => {
-                if (canvData.current.isDrawing) {
-                    const { startX, startY } = canvData.current
+    >(
+        e => {
+            const canvasElem = mainCanvasRef.current
+            const previewElem = previewCanvasRef.current
 
-                    canvData.current = { isDrawing: false }
+            if (!canvasElem || !previewElem) return
 
-                    const canvasElem = mainCanvasRef.current
-                    const previewElem = previewCanvasRef.current
+            const { x, y } = getPointerPosition(e, canvasElem)
 
-                    if (
-                        !canvasElem ||
-                        !previewElem ||
-                        startX == null ||
-                        startY == null
-                    )
-                        return
+            canvasDataRef.current.startX = x
+            canvasDataRef.current.startY = y
 
-                    const canvasCtx = canvasElem.getContext("2d")
-                    const previewCtx = previewElem.getContext("2d")
+            canvasDataRef.current.isDrawing = true
+        },
+        [canvasDataRef, mainCanvasRef, previewCanvasRef],
+    )
 
-                    if (!canvasCtx || !previewCtx) return
-
-                    previewCtx.clearRect(
-                        0,
-                        0,
-                        previewElem.width,
-                        previewElem.height,
-                    )
-
-                    const { x, y } = getPointerPosition(e, canvasElem)
-
-                    drawShape({
-                        startX,
-                        startY,
-                        currentX: x,
-                        currentY: y,
-                        context: canvasCtx,
-                        strokeColor,
-                        strokeSize,
-                        fillColor,
-                        ShapeClass,
-                    })
-                }
-            }
-        }
-    }, [ShapeClass, fillColor, strokeColor, strokeSize])
-
-    const pointerMoveHandler = useMemo<
+    const stopDrawingBrushHandler = useCallback<
         PointerEventHandler<HTMLCanvasElement>
-    >(() => {
-        if (!ShapeClass) {
-            return e => {
-                if (!canvData.current.isDrawing) return
+    >(
+        e => {
+            if (canvasDataRef.current.isDrawing)
+                canvasDataRef.current = { isDrawing: false }
+        },
+        [canvasDataRef],
+    )
 
-                const canvasElem = mainCanvasRef.current
-                if (!canvasElem) return
+    const stopDrawingShapeHandler = useCallback<
+        PointerEventHandler<HTMLCanvasElement>
+    >(
+        e => {
+            if (ShapeClass === null) return
 
-                const context = canvasElem.getContext("2d")
+            if (canvasDataRef.current.isDrawing) {
+                const { startX, startY } = canvasDataRef.current
 
-                if (!context) return
-
-                const { x, y } = getPointerPosition(e, canvasElem)
-
-                const { startX, startY } = canvData.current
-
-                drawBrush({
-                    startX,
-                    startY,
-                    currentX: x,
-                    currentY: y,
-                    context,
-                    brushColor: fillColor,
-                    brushSize,
-                })
-
-                canvData.current.startX = x
-                canvData.current.startY = y
-            }
-        } else {
-            return e => {
-                if (!canvData.current.isDrawing) return
+                canvasDataRef.current = { isDrawing: false }
 
                 const canvasElem = mainCanvasRef.current
                 const previewElem = previewCanvasRef.current
 
-                if (!canvasElem || !previewElem) return
+                if (
+                    !canvasElem ||
+                    !previewElem ||
+                    startX == null ||
+                    startY == null
+                )
+                    return
 
+                const canvasCtx = canvasElem.getContext("2d")
                 const previewCtx = previewElem.getContext("2d")
 
-                if (!previewCtx) return
-
-                const { x, y } = getPointerPosition(e, previewElem)
-
-                const { startX, startY } = canvData.current
-
-                if (startX == null || startY == null) return
+                if (!canvasCtx || !previewCtx) return
 
                 previewCtx.clearRect(
                     0,
@@ -203,64 +117,124 @@ export const useCanvas = () => {
                     previewElem.height,
                 )
 
+                const { x, y } = getPointerPosition(e, canvasElem)
+
                 drawShape({
                     startX,
                     startY,
                     currentX: x,
                     currentY: y,
-                    context: previewCtx,
+                    context: canvasCtx,
                     strokeColor,
-                    fillColor,
                     strokeSize,
+                    fillColor,
                     ShapeClass,
                 })
-
-                canvData.current.currentX = x
-                canvData.current.currentY = y
             }
-        }
-    }, [ShapeClass, strokeColor, fillColor, brushSize, strokeSize])
+        },
+        [
+            ShapeClass,
+            canvasDataRef,
+            fillColor,
+            mainCanvasRef,
+            previewCanvasRef,
+            strokeColor,
+            strokeSize,
+        ],
+    )
 
-    useEffect(() => {
-        const keyDownHandler = hasShapeClass
-            ? (e: KeyboardEvent) => {
-                  switch (e.key) {
-                      case "+":
-                          dispatch(increaseStrokeSize())
-                          break
-                      case "-":
-                          dispatch(decreaseStrokeSize())
-                          break
-                      case "Backspace":
-                          cancelDrawing()
-                          break
-                      default:
-                          return
-                  }
-              }
-            : (e: KeyboardEvent) => {
-                  switch (e.key) {
-                      case "+":
-                          dispatch(increaseBrushSize())
-                          break
-                      case "-":
-                          dispatch(decreaseBrushSize())
-                          break
-                      default:
-                          return
-                  }
-              }
+    const pointerMoveShapeHandler = useCallback<
+        PointerEventHandler<HTMLCanvasElement>
+    >(
+        e => {
+            if (!ShapeClass) return
+            if (!canvasDataRef.current.isDrawing) return
 
-        window.addEventListener("keydown", keyDownHandler)
+            const canvasElem = mainCanvasRef.current
+            const previewElem = previewCanvasRef.current
 
-        return () => window.removeEventListener("keydown", keyDownHandler)
-    }, [hasShapeClass, cancelDrawing, dispatch])
+            if (!canvasElem || !previewElem) return
+
+            const previewCtx = previewElem.getContext("2d")
+
+            if (!previewCtx) return
+
+            const { x, y } = getPointerPosition(e, previewElem)
+
+            const { startX, startY } = canvasDataRef.current
+
+            if (startX == null || startY == null) return
+
+            previewCtx.clearRect(0, 0, previewElem.width, previewElem.height)
+
+            drawShape({
+                startX,
+                startY,
+                currentX: x,
+                currentY: y,
+                context: previewCtx,
+                strokeColor,
+                fillColor,
+                strokeSize,
+                ShapeClass,
+            })
+
+            canvasDataRef.current.currentX = x
+            canvasDataRef.current.currentY = y
+        },
+        [
+            ShapeClass,
+            canvasDataRef,
+            fillColor,
+            mainCanvasRef,
+            previewCanvasRef,
+            strokeColor,
+            strokeSize,
+        ],
+    )
+
+    const pointerMoveBrushHandler = useCallback<
+        PointerEventHandler<HTMLCanvasElement>
+    >(
+        e => {
+            if (!canvasDataRef.current.isDrawing) return
+
+            const canvasElem = mainCanvasRef.current
+            if (!canvasElem) return
+
+            const context = canvasElem.getContext("2d")
+
+            if (!context) return
+
+            const { x, y } = getPointerPosition(e, canvasElem)
+
+            const { startX, startY } = canvasDataRef.current
+
+            drawBrush({
+                startX,
+                startY,
+                currentX: x,
+                currentY: y,
+                context,
+                brushColor: fillColor,
+                brushSize,
+            })
+
+            canvasDataRef.current.startX = x
+            canvasDataRef.current.startY = y
+        },
+        [brushSize, canvasDataRef, fillColor, mainCanvasRef],
+    )
 
     return {
-        mainCanvasRef,
-        previewCanvasRef,
-        pointerDownHandler,
-        pointerMoveHandler,
-        stopDrawingHandler,
+        pointerDownHandler: hasShapeClass
+            ? pointerDownShapeHandler
+            : pointerDownBrushHandler,
+        pointerMoveHandler: hasShapeClass
+            ? pointerMoveShapeHandler
+            : pointerMoveBrushHandler,
+        stopDrawingHandler: hasShapeClass
+            ? stopDrawingShapeHandler
+            : stopDrawingBrushHandler,
     }
 }

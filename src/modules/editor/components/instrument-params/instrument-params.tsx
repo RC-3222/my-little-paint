@@ -19,6 +19,8 @@ import {
 import { useAppDispatch, useAppSelector } from "@appStore"
 
 import styles from "./instrument-params.module.scss"
+import { ColorPicker } from "../../../../shared/components/color-picker"
+import { NumberInput } from "../../../../shared/components/number-input"
 
 export const InstrumentParams = () => {
     const currentInstrument = useAppSelector(selectCurrentInstrument)
@@ -35,65 +37,55 @@ export const InstrumentParams = () => {
             <h3 className={styles.title}>Instrument Params</h3>
             <div className={styles.paramContainer}>
                 {currentInstrument !== Instruments.Line && (
-                    <label className={styles.param}>
-                        <span>
-                            {currentInstrument === Instruments.Brush
+                    <ColorPicker
+                        className={styles.param}
+                        label={
+                            currentInstrument === Instruments.Brush
                                 ? "Brush color:"
-                                : "Fill color:"}
-                        </span>
-                        <input
-                            type="color"
-                            value={fillColor}
-                            onChange={e => {
-                                dispatch(setFillColor(e.target.value))
-                            }}
-                        />
-                    </label>
+                                : "Fill color:"
+                        }
+                        value={fillColor}
+                        onChange={e => {
+                            dispatch(setFillColor(e.target.value))
+                        }}
+                    />
                 )}
                 {currentInstrument !== Instruments.Brush && (
-                    <label className={styles.param}>
-                        <span>Stroke color:</span>
-                        <input
-                            type="color"
-                            value={strokeColor}
-                            onChange={e => {
-                                dispatch(setStrokeColor(e.target.value))
-                            }}
-                        />
-                    </label>
+                    <ColorPicker
+                        className={styles.param}
+                        label="Stroke color:"
+                        value={strokeColor}
+                        onChange={e => {
+                            dispatch(setStrokeColor(e.target.value))
+                        }}
+                    />
                 )}
                 {currentInstrument === Instruments.Brush ? (
-                    <label className={styles.param}>
-                        <span>Brush size:</span>
-                        <input
-                            type="number"
-                            value={brushSize}
-                            step="0.5"
-                            onChange={e => {
-                                dispatch(setBrushSize(+e.target.value))
-                            }}
-                            min={MIN_BRUSH_SIZE}
-                            max={MAX_BRUSH_SIZE}
-                        />
-                    </label>
+                    <NumberInput
+                        className={styles.param}
+                        label="Brush size:"
+                        value={brushSize}
+                        step="0.5"
+                        onChange={e => dispatch(setBrushSize(+e.target.value))}
+                        min={MIN_BRUSH_SIZE}
+                        max={MAX_BRUSH_SIZE}
+                    />
                 ) : (
-                    <label className={styles.param}>
-                        <span>
-                            {currentInstrument === Instruments.Line
+                    <NumberInput
+                        className={styles.param}
+                        label={
+                            currentInstrument === Instruments.Line
                                 ? "Line width:"
-                                : "Stroke size:"}
-                        </span>
-                        <input
-                            type="number"
-                            value={strokeSize}
-                            step="0.5"
-                            onChange={e => {
-                                dispatch(setStrokeSize(+e.target.value))
-                            }}
-                            min={MIN_STROKE_SIZE}
-                            max={MAX_STROKE_SIZE}
-                        />
-                    </label>
+                                : "Stroke size:"
+                        }
+                        value={strokeSize}
+                        step="0.5"
+                        onChange={e => {
+                            dispatch(setStrokeSize(+e.target.value))
+                        }}
+                        min={MIN_STROKE_SIZE}
+                        max={MAX_STROKE_SIZE}
+                    />
                 )}
             </div>
         </div>

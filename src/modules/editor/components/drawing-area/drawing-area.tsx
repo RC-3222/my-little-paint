@@ -19,29 +19,38 @@ export const DrawingArea = ({
     onPointerLeave,
     onPointerMove,
 }: DrawingAreaProps) => {
+    const pointerEventHandler: PointerEventHandler = e => {
+        if (e.target !== previewRef.current) return
+
+        switch (e.type) {
+            case "pointerdown": {
+                onPointerDown(e)
+                break
+            }
+            case "pointermove": {
+                onPointerMove(e)
+                break
+            }
+            case "pointerup": {
+                onPointerUp(e)
+                break
+            }
+            case "pointerleave": {
+                onPointerLeave(e)
+                break
+            }
+            default:
+                return
+        }
+    }
+
     return (
         <div
             className={styles.container}
-            onPointerDown={e => {
-                if (e.target === previewRef.current) {
-                    onPointerDown(e)
-                }
-            }}
-            onPointerUp={e => {
-                if (e.target === previewRef.current) {
-                    onPointerUp(e)
-                }
-            }}
-            onPointerLeave={e => {
-                if (e.target === previewRef.current) {
-                    onPointerLeave(e)
-                }
-            }}
-            onPointerMove={e => {
-                if (e.target === previewRef.current) {
-                    onPointerMove(e)
-                }
-            }}
+            onPointerDown={pointerEventHandler}
+            onPointerUp={pointerEventHandler}
+            onPointerLeave={pointerEventHandler}
+            onPointerMove={pointerEventHandler}
         >
             <canvas
                 width={762}
