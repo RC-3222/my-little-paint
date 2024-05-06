@@ -1,5 +1,6 @@
 import { storage, db } from "@appFirebase/firebase"
 import { TOAST_TIMEOUT } from "@appShared"
+import { createErrorToast } from "@appShared/utils"
 import type { User } from "firebase/auth"
 import { addDoc, collection } from "firebase/firestore"
 import { ref, uploadString, getDownloadURL } from "firebase/storage"
@@ -36,20 +37,7 @@ export function useSaveImage(user: User | null) {
         } catch (e) {
             let errorMessage = "Error while saving your image"
 
-            const toastId = "saveImgError"
-
-            toast.error(errorMessage, {
-                position: "bottom-right",
-                autoClose: TOAST_TIMEOUT,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                toastId: toastId,
-                updateId: toastId,
-            })
+            createErrorToast(errorMessage, "saveImgError")
 
             console.error(e)
         }
