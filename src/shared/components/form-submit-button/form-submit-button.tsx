@@ -1,4 +1,4 @@
-import { Button } from "@appShared"
+import { Button } from "@appShared/components"
 import styles from "./form-submit-button.module.scss"
 import type { PropsWithChildren } from "react"
 

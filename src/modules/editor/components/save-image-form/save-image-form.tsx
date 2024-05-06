@@ -1,4 +1,9 @@
-import { Form, FormInput, FormSubmitButton, GlobalLoader } from "@appShared"
+import {
+    Form,
+    FormInput,
+    FormSubmitButton,
+    GlobalLoader,
+} from "@appShared/components"
 
 import styles from "./save-image-form.module.scss"
 import { SaveImgSchema } from "@appModules/editor/schemas"

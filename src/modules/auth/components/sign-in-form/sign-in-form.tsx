@@ -1,10 +1,12 @@
 import { FormSchema, signIn } from "@appModules/auth"
-import { FormSubmitButton, FormInput, Routes, Form } from "@appShared"
+import { FormSubmitButton, FormInput, Form } from "@appShared/components"
+
 import { useAppDispatch } from "@appStore"
 import { Link } from "react-router-dom"
 import type { TypeOf } from "zod"
 
 import styles from "./sign-in-form.module.scss"
+import { Routes } from "@appShared/constants"
 
 export const SignInForm = () => {
     const dispatch = useAppDispatch()

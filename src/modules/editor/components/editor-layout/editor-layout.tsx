@@ -2,7 +2,7 @@ import { StickyHeader } from "@appShared/components/sticky-header/sticky-header"
 import { DrawingArea } from "../drawing-area"
 
 import styles from "./editor-layout.module.scss"
-import { Button } from "@appShared"
+import { Button } from "@appShared/components"
 import { InstrumentPanel } from "../instrument-panel/instrument-panel"
 import { useCanvas } from "@appModules/editor/hooks"
 import { useRef, useState } from "react"
