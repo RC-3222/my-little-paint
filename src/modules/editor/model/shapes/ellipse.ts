@@ -1,7 +1,7 @@
 import { Shape } from "./shape"
 
 export class Ellipse extends Shape {
-    protected drawShape() {
+    public draw() {
         const startX = Math.min(this.startX, this.currentX)
         const endX = Math.max(this.startX, this.currentX)
         const startY = Math.min(this.startY, this.currentY)

@@ -1,7 +1,7 @@
 import { Shape } from "./shape"
 
 export class Circle extends Shape {
-    protected drawShape() {
+    public draw() {
         const radius = Math.sqrt(
             Math.pow(this.currentX - this.startX, 2) +
                 Math.pow(this.currentY - this.startY, 2),

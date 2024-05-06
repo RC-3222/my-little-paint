@@ -1,7 +1,7 @@
 import { Shape } from "./shape"
 
 export class Star extends Shape {
-    protected drawShape() {
+    public draw() {
         const radiusX = (this.currentX - this.startX) / 2
         const radiusY = (this.currentY - this.startY) / 2
         const centerX = this.startX + radiusX

@@ -1,3 +1,2 @@
-export { getCursorPosition } from "./get-cursor-position"
-export { drawBrush } from "./drawing/draw-brush"
-export {}
+export { getPointerPosition } from "./get-pointer-position"
+export { drawBrush, drawShape } from "./drawing"

@@ -1,27 +1,60 @@
-import { Canvas } from "../canvas"
+import type { PointerEventHandler, RefObject } from "react"
 
 import styles from "./drawing-area.module.scss"
-import { useCanvas } from "@appModules/editor/hooks"
 
-export const DrawingArea = () => {
-    const {
-        mainCanvasRef,
-        previewCanvasRef,
-        mouseDownHandler,
-        stopDrawingHandler,
-        mouseMoveHandler,
-    } = useCanvas()
+type DrawingAreaProps = {
+    canvasRef: RefObject<HTMLCanvasElement>
+    previewRef: RefObject<HTMLCanvasElement>
+    onPointerUp: PointerEventHandler
+    onPointerMove: PointerEventHandler
+    onPointerLeave: PointerEventHandler
+    onPointerDown: PointerEventHandler
+}
 
+export const DrawingArea = ({
+    canvasRef,
+    previewRef,
+    onPointerDown,
+    onPointerUp,
+    onPointerLeave,
+    onPointerMove,
+}: DrawingAreaProps) => {
     return (
-        <div className={styles.container}>
-            <Canvas
-                canvasRef={mainCanvasRef}
-                previewRef={previewCanvasRef}
-                onMouseDown={mouseDownHandler}
-                onMouseUp={stopDrawingHandler}
-                onMouseMove={mouseMoveHandler}
-                onMouseLeave={stopDrawingHandler}
-            />
+        <div
+            className={styles.container}
+            onPointerDown={e => {
+                if (e.target === previewRef.current) {
+                    onPointerDown(e)
+                }
+            }}
+            onPointerUp={e => {
+                if (e.target === previewRef.current) {
+                    onPointerUp(e)
+                }
+            }}
+            onPointerLeave={e => {
+                if (e.target === previewRef.current) {
+                    onPointerLeave(e)
+                }
+            }}
+            onPointerMove={e => {
+                if (e.target === previewRef.current) {
+                    onPointerMove(e)
+                }
+            }}
+        >
+            <canvas
+                width={762}
+                height={762}
+                className={styles.canvas}
+                ref={canvasRef}
+            ></canvas>
+            <canvas
+                width={762}
+                height={762}
+                className={styles.canvas_preview}
+                ref={previewRef}
+            ></canvas>
         </div>
     )
 }

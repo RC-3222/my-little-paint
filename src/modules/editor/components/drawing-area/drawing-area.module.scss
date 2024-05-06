@@ -1,21 +1,26 @@
 .container {
     box-sizing: border-box;
 
-    padding-top: 6rem;
+    position: relative;
 
-    min-height: 100vh;
-
-    width: 100vw;
-    min-width: fit-content;
+    box-sizing: border-box;
 
     background-color: gray;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     overflow-x: scroll;
     &::-webkit-scrollbar {
         display: none;
     }
+}
+
+.canvas {
+    background-color: white;
+}
+
+.canvas_preview {
+    position: absolute;
+    background-color: transparent;
+    top: 0;
+    left: 0;
+    z-index: 2;
 }

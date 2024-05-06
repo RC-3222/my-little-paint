@@ -1,6 +1,11 @@
 import type { PayloadAction } from "@reduxjs/toolkit/react"
 import { createSlice } from "@reduxjs/toolkit/react"
-import { MAX_BRUSH_SIZE, MIN_BRUSH_SIZE } from "../constants"
+import {
+    MAX_BRUSH_SIZE,
+    MAX_STROKE_SIZE,
+    MIN_BRUSH_SIZE,
+    MIN_STROKE_SIZE,
+} from "../constants"
 import { Circle, Ellipse, Line, Rectangle, Star } from "../model"
 
 export const enum Instruments {
@@ -23,6 +28,7 @@ const instrumentsTypesToShapeClasses = {
 
 export type EditorSliceState = {
     brushSize: number
+    strokeSize: number
     currentInstrument: Instruments
     strokeColor: string
     fillColor: string
@@ -30,9 +36,10 @@ export type EditorSliceState = {
 
 const initialState: EditorSliceState = {
     brushSize: MIN_BRUSH_SIZE,
+    strokeSize: MIN_STROKE_SIZE,
     currentInstrument: Instruments.Brush,
-    strokeColor: "black",
-    fillColor: "black",
+    strokeColor: "#000000",
+    fillColor: "#000000",
 }
 
 export const editorSlice = createSlice({
@@ -49,6 +56,14 @@ export const editorSlice = createSlice({
                 state.strokeColor = action.payload
             },
         ),
+        setStrokeSize: create.reducer(
+            (state, action: PayloadAction<number>) => {
+                state.strokeSize = Math.max(
+                    MIN_STROKE_SIZE,
+                    Math.min(MAX_STROKE_SIZE, action.payload),
+                )
+            },
+        ),
         setFillColor: create.reducer((state, action: PayloadAction<string>) => {
             state.fillColor = action.payload
         }),
@@ -57,6 +72,12 @@ export const editorSlice = createSlice({
         }),
         decreaseBrushSize: create.reducer(state => {
             state.brushSize = Math.max(MIN_BRUSH_SIZE, state.brushSize - 0.5)
+        }),
+        increaseStrokeSize: create.reducer(state => {
+            state.strokeSize = Math.min(MAX_STROKE_SIZE, state.brushSize + 0.5)
+        }),
+        decreaseStrokeSize: create.reducer(state => {
+            state.strokeSize = Math.max(MIN_STROKE_SIZE, state.brushSize - 0.5)
         }),
         setBrushSize: create.reducer((state, action: PayloadAction<number>) => {
             state.brushSize = Math.max(
@@ -67,11 +88,12 @@ export const editorSlice = createSlice({
     }),
     selectors: {
         selectBrushSize: state => state.brushSize,
+        selectStrokeSize: state => state.strokeSize,
         selectCurrentInstrument: state => state.currentInstrument,
         selectShapeClass: state =>
             instrumentsTypesToShapeClasses[state.currentInstrument],
-        selectStrokeColor: state => state.currentInstrument,
-        selectFillColor: state => state.currentInstrument,
+        selectStrokeColor: state => state.strokeColor,
+        selectFillColor: state => state.fillColor,
     },
 })
 
@@ -79,13 +101,17 @@ export const {
     setCurrentInstrument,
     increaseBrushSize,
     decreaseBrushSize,
+    increaseStrokeSize,
+    decreaseStrokeSize,
     setBrushSize,
+    setStrokeSize,
     setFillColor,
     setStrokeColor,
 } = editorSlice.actions
 
 export const {
     selectBrushSize,
+    selectStrokeSize,
     selectShapeClass,
     selectFillColor,
     selectStrokeColor,

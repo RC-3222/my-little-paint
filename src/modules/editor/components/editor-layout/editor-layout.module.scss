@@ -9,7 +9,7 @@
 
     display: flex;
 
-    height: 6rem;
+    height: $height-header;
 
     width: max(100vw, 100%);
 
@@ -20,6 +20,8 @@
     &::-webkit-scrollbar {
         display: none;
     }
+
+    justify-content: space-between;
 }
 
 .title {
@@ -31,7 +33,20 @@
 }
 
 .main {
+    box-sizing: border-box;
+
+    padding-top: $height-header + 2rem;
+
+    min-height: 100vh;
+
     width: 100vw;
+    min-width: fit-content;
+
+    background-color: gray;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     overflow: scroll;
     &::-webkit-scrollbar {

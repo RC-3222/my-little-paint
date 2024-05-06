@@ -1,4 +1,4 @@
-import type { Shape } from "@appModules/editor/model/drawable/shape"
+import type { Shape } from "@appModules/editor/model/shapes/shape"
 
 type Args = {
     context: CanvasRenderingContext2D | null | undefined
@@ -9,6 +9,7 @@ type Args = {
     ShapeClass: new (...args: ConstructorParameters<typeof Shape>) => Shape
     fillColor: string
     strokeColor?: string
+    strokeSize: number
 }
 
 export const drawShape = ({
@@ -20,16 +21,21 @@ export const drawShape = ({
     ShapeClass,
     fillColor,
     strokeColor = fillColor,
+    strokeSize,
 }: Args) => {
     if (!context) return
 
-    new ShapeClass(
-        context,
-        startX,
-        startY,
-        currentX,
-        currentY,
-        fillColor,
-        strokeColor,
-    ).draw()
+    context.fillStyle = fillColor
+    context.strokeStyle = strokeColor
+
+    context.beginPath()
+
+    context.lineWidth = strokeSize
+
+    new ShapeClass(context, startX, startY, currentX, currentY).draw()
+
+    context.fill()
+    if (strokeSize) context.stroke()
+
+    context.closePath()
 }

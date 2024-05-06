@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@appStore"
-import type { MouseEventHandler } from "react"
+import type { PointerEventHandler } from "react"
 import { useCallback, useEffect, useMemo, useRef } from "react"
-import { drawBrush, getCursorPosition } from "../utils"
+import { drawBrush, drawShape, getPointerPosition } from "../utils"
 import {
     increaseBrushSize,
     decreaseBrushSize,
@@ -9,8 +9,10 @@ import {
     selectBrushSize,
     selectFillColor,
     selectStrokeColor,
+    selectStrokeSize,
+    increaseStrokeSize,
+    decreaseStrokeSize,
 } from "../store"
-import { drawShape } from "../utils/drawing"
 
 type CanvasData = {
     startX?: number
@@ -30,20 +32,21 @@ export const useCanvas = () => {
     const brushSize = useAppSelector(selectBrushSize)
     const fillColor = useAppSelector(selectFillColor)
     const strokeColor = useAppSelector(selectStrokeColor)
+    const strokeSize = useAppSelector(selectStrokeSize)
 
     const dispatch = useAppDispatch()
 
     const hasShapeClass = !!ShapeClass
 
-    const mouseDownHandler = useMemo<
-        MouseEventHandler<HTMLCanvasElement>
+    const pointerDownHandler = useMemo<
+        PointerEventHandler<HTMLCanvasElement>
     >(() => {
         if (!hasShapeClass) {
             return e => {
                 const canvasElem = mainCanvasRef.current
                 if (!canvasElem) return
                 const context = canvasElem.getContext("2d")
-                const { x, y } = getCursorPosition(e, canvasElem)
+                const { x, y } = getPointerPosition(e, canvasElem)
                 drawBrush({
                     currentX: x,
                     currentY: y,
@@ -63,7 +66,7 @@ export const useCanvas = () => {
 
                 if (!canvasElem || !previewElem) return
 
-                const { x, y } = getCursorPosition(e, canvasElem)
+                const { x, y } = getPointerPosition(e, canvasElem)
 
                 canvData.current.startX = x
                 canvData.current.startY = y
@@ -88,7 +91,7 @@ export const useCanvas = () => {
     }, [])
 
     const stopDrawingHandler = useMemo<
-        MouseEventHandler<HTMLCanvasElement>
+        PointerEventHandler<HTMLCanvasElement>
     >(() => {
         if (!ShapeClass) {
             return e => {
@@ -125,7 +128,7 @@ export const useCanvas = () => {
                         previewElem.height,
                     )
 
-                    const { x, y } = getCursorPosition(e, canvasElem)
+                    const { x, y } = getPointerPosition(e, canvasElem)
 
                     drawShape({
                         startX,
@@ -134,16 +137,17 @@ export const useCanvas = () => {
                         currentY: y,
                         context: canvasCtx,
                         strokeColor,
+                        strokeSize,
                         fillColor,
                         ShapeClass,
                     })
                 }
             }
         }
-    }, [ShapeClass, fillColor, strokeColor])
+    }, [ShapeClass, fillColor, strokeColor, strokeSize])
 
-    const mouseMoveHandler = useMemo<
-        MouseEventHandler<HTMLCanvasElement>
+    const pointerMoveHandler = useMemo<
+        PointerEventHandler<HTMLCanvasElement>
     >(() => {
         if (!ShapeClass) {
             return e => {
@@ -156,7 +160,7 @@ export const useCanvas = () => {
 
                 if (!context) return
 
-                const { x, y } = getCursorPosition(e, canvasElem)
+                const { x, y } = getPointerPosition(e, canvasElem)
 
                 const { startX, startY } = canvData.current
 
@@ -186,7 +190,7 @@ export const useCanvas = () => {
 
                 if (!previewCtx) return
 
-                const { x, y } = getCursorPosition(e, previewElem)
+                const { x, y } = getPointerPosition(e, previewElem)
 
                 const { startX, startY } = canvData.current
 
@@ -207,6 +211,7 @@ export const useCanvas = () => {
                     context: previewCtx,
                     strokeColor,
                     fillColor,
+                    strokeSize,
                     ShapeClass,
                 })
 
@@ -214,12 +219,18 @@ export const useCanvas = () => {
                 canvData.current.currentY = y
             }
         }
-    }, [ShapeClass, strokeColor, fillColor, brushSize])
+    }, [ShapeClass, strokeColor, fillColor, brushSize, strokeSize])
 
     useEffect(() => {
         const keyDownHandler = hasShapeClass
             ? (e: KeyboardEvent) => {
                   switch (e.key) {
+                      case "+":
+                          dispatch(increaseStrokeSize())
+                          break
+                      case "-":
+                          dispatch(decreaseStrokeSize())
+                          break
                       case "Backspace":
                           cancelDrawing()
                           break
@@ -248,8 +259,8 @@ export const useCanvas = () => {
     return {
         mainCanvasRef,
         previewCanvasRef,
-        mouseDownHandler,
-        mouseMoveHandler,
+        pointerDownHandler,
+        pointerMoveHandler,
         stopDrawingHandler,
     }
 }

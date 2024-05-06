@@ -1,5 +1,5 @@
-export function getCursorPosition(
-    e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+export function getPointerPosition(
+    e: React.PointerEvent<HTMLCanvasElement>,
     canvas: HTMLCanvasElement,
 ) {
     const rect = e.currentTarget.getBoundingClientRect()
