@@ -6,8 +6,9 @@ import {
 } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { authSlice } from "@appModules/auth"
+import { editorSlice } from "@appModules/editor"
 
-const rootReducer = combineSlices(authSlice)
+const rootReducer = combineSlices(authSlice, editorSlice)
 export type RootState = ReturnType<typeof rootReducer>
 
 export const makeStore = (preloadedState?: Partial<RootState>) => {

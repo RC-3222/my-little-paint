@@ -1,0 +1,33 @@
+@use "@appShared/scss" as *;
+
+.instrumentParams {
+    box-sizing: border-box;
+    width: 100%;
+
+    background-color: rgba(lighten(desaturate($clr-primary, 30), 30), 0.5);
+
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.paramContainer {
+    box-sizing: border-box;
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, max(12rem, 100%));
+
+    gap: 0.75rem;
+
+    width: 100%;
+}
+
+.param {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    margin: 0;
+    padding: 0.25rem 0;
+}

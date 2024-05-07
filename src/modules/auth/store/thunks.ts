@@ -5,9 +5,8 @@ import {
     firebaseSignUp,
 } from "@appFirebase/api"
 import type { UserCredentials } from "."
-import { toast } from "react-toastify"
 import { FirebaseError } from "firebase/app"
-import { TOAST_TIMEOUT } from "@appShared/constants"
+import { createErrorToast } from "@appShared/utils"
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
     try {
@@ -15,20 +14,7 @@ export const signOut = createAsyncThunk("auth/signOut", async () => {
     } catch (err) {
         let errorMessage = "Unknown error"
 
-        const toastId = "signOutError"
-
-        toast.error(errorMessage, {
-            position: "bottom-right",
-            autoClose: TOAST_TIMEOUT,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            toastId: toastId,
-            updateId: toastId,
-        })
+        createErrorToast(errorMessage, "signOutError")
 
         throw new Error(errorMessage)
     }
@@ -41,32 +27,19 @@ export const signIn = createAsyncThunk(
             const response = await firebaseSignIn(email, password)
             return response.user.email as string
         } catch (err) {
-            let errorMassage = "Unknown error"
+            let errorMessage = "Unknown error"
 
             if (err instanceof FirebaseError) {
                 if (err.code === "auth/invalid-credential") {
-                    errorMassage = "Incorrect email or password"
+                    errorMessage = "Incorrect email or password"
                 } else {
-                    errorMassage = "Unknown server error"
+                    errorMessage = "Unknown server error"
                 }
             }
 
-            const toastId = "signInError"
+            createErrorToast(errorMessage, "signInError")
 
-            toast.error(errorMassage, {
-                position: "bottom-right",
-                autoClose: TOAST_TIMEOUT,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                toastId: toastId,
-                updateId: toastId,
-            })
-
-            throw new Error(errorMassage)
+            throw new Error(errorMessage)
         }
     },
 )
@@ -79,32 +52,19 @@ export const signUp = createAsyncThunk(
 
             return response.user.email as string
         } catch (err) {
-            let errorMassage = "Unknown error"
+            let errorMessage = "Unknown error"
 
             if (err instanceof FirebaseError) {
                 if (err.code === "auth/email-already-in-use") {
-                    errorMassage = "Provided email is already in use"
+                    errorMessage = "Provided email is already in use"
                 } else {
-                    errorMassage = "Unknown server error"
+                    errorMessage = "Unknown server error"
                 }
             }
 
-            const toastId = "signUpError"
+            createErrorToast(errorMessage, "signUpError")
 
-            toast.error(errorMassage, {
-                position: "bottom-right",
-                autoClose: TOAST_TIMEOUT,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                toastId: toastId,
-                updateId: toastId,
-            })
-
-            throw new Error(errorMassage)
+            throw new Error(errorMessage)
         }
     },
 )

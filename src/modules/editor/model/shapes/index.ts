@@ -1,0 +1,5 @@
+export { Circle } from "./circle"
+export { Ellipse } from "./ellipse"
+export { Line } from "./line"
+export { Rectangle } from "./rectangle"
+export { Star } from "./star"

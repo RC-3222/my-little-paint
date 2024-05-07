@@ -1,12 +1,11 @@
 import { FormSchema, signUp } from "@appModules/auth"
-import { FormInput } from "../form-input"
-import { FormSubmitButton } from "../form-submit-button"
+import { FormSubmitButton, FormInput, Form } from "@appShared/components"
 import { useAppDispatch } from "@appStore"
 import { Link } from "react-router-dom"
 import type { TypeOf } from "zod"
-import { Routes, Form } from "@appShared"
 
 import styles from "./sign-up-form.module.scss"
+import { Routes } from "@appShared/constants"
 
 export const SignUpForm = () => {
     const dispatch = useAppDispatch()
