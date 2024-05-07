@@ -1,0 +1,63 @@
+@use "@appShared/scss" as *;
+
+.header {
+    box-sizing: border-box;
+    background-color: $clr-primary;
+    color: $clr-secondary;
+
+    padding: 1rem 3rem 1.5rem;
+
+    display: flex;
+
+    height: $height-header;
+
+    width: max(100vw, 100%);
+
+    align-items: center;
+
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    justify-content: space-between;
+
+    &__rightSide,
+    &__leftSide {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        gap: 1rem;
+    }
+}
+
+.main {
+    box-sizing: border-box;
+
+    padding-top: $height-header;
+
+    min-height: 100vh;
+
+    width: 100vw;
+    min-width: fit-content;
+
+    background: $bg-gradient;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    justify-content: stretch;
+}
+
+.content {
+    box-sizing: border-box;
+
+    padding: 2rem 3rem;
+
+    background-color: $clr-secondary;
+
+    width: min(80rem, 100%);
+}

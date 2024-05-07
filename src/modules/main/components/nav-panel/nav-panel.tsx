@@ -1,17 +1,12 @@
-import { NavLink } from "react-router-dom"
-import { Button } from "@appShared/components"
+import { Link } from "@appShared/components"
 import { Routes } from "@appShared/constants"
-import { signOut } from "@appModules/auth"
-import { useAppDispatch } from "@appStore"
+
+import styles from "./nav-panel.module.scss"
 
 export const NavPanel = () => {
-    const dispatch = useAppDispatch()
-
     return (
-        <nav>
-            <NavLink to={Routes.Main}>Main</NavLink>
-            <NavLink to={Routes.Editor}>Editor</NavLink>
-            <Button onClick={() => dispatch(signOut())}>Sign Out</Button>
+        <nav className={styles.navPanel}>
+            <Link to={Routes.Editor}>Editor</Link>
         </nav>
     )
 }
