@@ -8,8 +8,25 @@
 
     color: $clr-secondary;
 
-    &:focus-visible {
+    outline: none;
+
+    position: relative;
+
+    &::before {
+        content: " ";
+        color: inherit;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
         border-bottom: 2px solid currentColor;
+        transition: width 250ms;
+    }
+
+    &:focus-visible {
+        &::before {
+            width: 100%;
+        }
     }
 
     &:hover {

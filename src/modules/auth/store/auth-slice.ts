@@ -1,20 +1,15 @@
 import { createAppSlice } from "@appStore/create-app-slice"
 import { signIn, signOut, signUp } from "./thunks"
-
-export const enum AuthReqState {
-    Pending = "Pending",
-    Idle = "Idle",
-    Failed = "Failed",
-}
+import { ReqState } from "@appShared/constants"
 
 export interface AuthSliceState {
     user: string | null
-    status: AuthReqState
+    status: ReqState
 }
 
 const initialState: AuthSliceState = {
     user: localStorage.getItem("user") ?? null,
-    status: AuthReqState.Idle,
+    status: ReqState.Idle,
 }
 
 export const authSlice = createAppSlice({
@@ -25,39 +20,39 @@ export const authSlice = createAppSlice({
         builder
             // sign out
             .addCase(signOut.pending, state => {
-                state.status = AuthReqState.Pending
+                state.status = ReqState.Pending
             })
             .addCase(signOut.fulfilled, state => {
-                state.status = AuthReqState.Idle
+                state.status = ReqState.Idle
                 localStorage.removeItem("user")
                 state.user = null
             })
             .addCase(signOut.rejected, (state, action) => {
-                state.status = AuthReqState.Failed
+                state.status = ReqState.Failed
             })
             // sign in
             .addCase(signIn.pending, state => {
-                state.status = AuthReqState.Pending
+                state.status = ReqState.Pending
             })
             .addCase(signIn.fulfilled, (state, action) => {
                 localStorage.setItem("user", action.payload)
-                state.status = AuthReqState.Idle
+                state.status = ReqState.Idle
                 state.user = action.payload
             })
             .addCase(signIn.rejected, (state, action) => {
-                state.status = AuthReqState.Failed
+                state.status = ReqState.Failed
             })
             // sign up
             .addCase(signUp.pending, state => {
-                state.status = AuthReqState.Pending
+                state.status = ReqState.Pending
             })
             .addCase(signUp.fulfilled, (state, action) => {
                 localStorage.setItem("user", action.payload)
-                state.status = AuthReqState.Idle
+                state.status = ReqState.Idle
                 state.user = action.payload
             })
             .addCase(signUp.rejected, (state, action) => {
-                state.status = AuthReqState.Failed
+                state.status = ReqState.Failed
             })
     },
     selectors: {

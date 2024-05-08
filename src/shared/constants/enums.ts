@@ -6,3 +6,9 @@ export const enum Routes {
     Fallback = "/*",
     Root = "/",
 }
+
+export const enum ReqState {
+    Pending = "Pending",
+    Idle = "Idle",
+    Failed = "Failed",
+}

@@ -6,7 +6,7 @@ import styles from "./nav-panel.module.scss"
 export const NavPanel = () => {
     return (
         <nav className={styles.navPanel}>
-            <Link to={Routes.Editor}>Editor</Link>
+            <Link to={Routes.Editor}>To Editor</Link>
         </nav>
     )
 }

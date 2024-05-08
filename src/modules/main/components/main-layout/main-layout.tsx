@@ -4,11 +4,25 @@ import { NavPanel } from "../nav-panel"
 import { Search } from "../search"
 
 import styles from "./main-layout.module.scss"
-import { useAppDispatch } from "@appStore"
+import { useAppDispatch, useAppSelector } from "@appStore"
 import { signOut } from "@appModules/auth"
+import { useEffect } from "react"
+import { getData, selectData } from "@appModules/main/store"
+import { ImageList } from "../image-list"
+import { useSearchParams } from "react-router-dom"
 
 export const MainLayout = () => {
     const dispatch = useAppDispatch()
+
+    const data = useAppSelector(selectData)
+
+    const [urlParams] = useSearchParams()
+
+    const searchParam = urlParams.get("reqStr")
+
+    useEffect(() => {
+        dispatch(getData(searchParam ?? undefined))
+    }, [searchParam])
 
     return (
         <>
@@ -30,7 +44,9 @@ export const MainLayout = () => {
                 </div>
             </StickyHeader>
             <main className={styles.main}>
-                <div className={styles.content}>My cum</div>
+                <div className={styles.content}>
+                    <ImageList data={data} />
+                </div>
             </main>
         </>
     )
