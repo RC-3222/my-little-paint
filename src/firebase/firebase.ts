@@ -24,3 +24,4 @@ export const db = getFirestore(app)
 export const storage = getStorage(app)
 
 export const imagesRef = collection(db, "images")
+export const usersRef = collection(db, "users")

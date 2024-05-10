@@ -8,9 +8,7 @@ import {
 import styles from "./save-image-form.module.scss"
 import { SaveImgSchema } from "@appModules/editor/schemas"
 import type { TypeOf } from "zod"
-import { auth } from "@appFirebase/firebase"
 import { useSaveImage } from "@appModules/editor/hooks"
-import type { User } from "firebase/auth"
 import { useEffect, type RefObject } from "react"
 import { Backdrop } from "@appShared/components/backdrop"
 
@@ -20,7 +18,7 @@ type SaveImageFormProps = {
 }
 
 export const SaveImageForm = ({ onClose, canvasRef }: SaveImageFormProps) => {
-    const { saveImage, isLoading } = useSaveImage(auth.currentUser as User)
+    const { saveImage, isLoading } = useSaveImage()
 
     const onSubmit = async ({ imgName }: TypeOf<typeof SaveImgSchema>) => {
         const dataUrl = canvasRef.current?.toDataURL()

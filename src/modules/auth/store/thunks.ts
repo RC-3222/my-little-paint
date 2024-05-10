@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit/react"
 import {
+    firebaseCreateUser,
     firebaseSignIn,
     firebaseSignOut,
     firebaseSignUp,
@@ -49,6 +50,8 @@ export const signUp = createAsyncThunk(
     async ({ email, password }: UserCredentials) => {
         try {
             const response = await firebaseSignUp(email, password)
+
+            await firebaseCreateUser()
 
             return response.user.email as string
         } catch (err) {

@@ -4,4 +4,5 @@ export type ImageData = {
     imageName: string
     imageUrl: string
     userEmail: string
+    storagePath: string
 }

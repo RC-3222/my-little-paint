@@ -10,6 +10,7 @@ import { useEffect } from "react"
 import { getData, selectData } from "@appModules/main/store"
 import { ImageList } from "../image-list"
 import { useSearchParams } from "react-router-dom"
+//import { firebaseGetUsers } from "@appFirebase/api"
 
 export const MainLayout = () => {
     const dispatch = useAppDispatch()
@@ -22,6 +23,8 @@ export const MainLayout = () => {
 
     useEffect(() => {
         dispatch(getData(searchParam ?? undefined))
+
+        //firebaseGetUsers().then((data)=>console.log(data)).catch(err=>console.error(err))
     }, [searchParam])
 
     return (
