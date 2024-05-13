@@ -25,7 +25,7 @@ export const MainLayout = () => {
         dispatch(getData(searchParam ?? undefined))
 
         //firebaseGetUsers().then((data)=>console.log(data)).catch(err=>console.error(err))
-    }, [searchParam])
+    }, [searchParam, dispatch])
 
     return (
         <>

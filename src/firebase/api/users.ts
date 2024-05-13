@@ -50,5 +50,5 @@ export async function firebaseGetUsers() {
 
     const docs = await getDocs(q)
 
-    return docs.docs.map(doc => doc.data())
+    return docs.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 }

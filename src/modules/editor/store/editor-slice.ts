@@ -7,6 +7,9 @@ import {
     MIN_STROKE_SIZE,
 } from "../constants"
 import { Circle, Ellipse, Line, Rectangle, Star } from "../model"
+import { getImageData } from "./thunks"
+import { ReqState } from "@appShared/constants"
+import type { ImageData } from "@appShared/types"
 
 export const enum Instruments {
     Brush = "Brush",
@@ -27,11 +30,13 @@ const instrumentsTypesToShapeClasses = {
 }
 
 export type EditorSliceState = {
+    reqStatus: ReqState
     brushSize: number
     strokeSize: number
     currentInstrument: Instruments
     strokeColor: string
     fillColor: string
+    currentImageData: ImageData | null
 }
 
 const initialState: EditorSliceState = {
@@ -40,6 +45,8 @@ const initialState: EditorSliceState = {
     currentInstrument: Instruments.Brush,
     strokeColor: "#000000",
     fillColor: "#000000",
+    currentImageData: null,
+    reqStatus: ReqState.Idle,
 }
 
 export const editorSlice = createSlice({
@@ -54,6 +61,11 @@ export const editorSlice = createSlice({
         setStrokeColor: create.reducer(
             (state, action: PayloadAction<string>) => {
                 state.strokeColor = action.payload
+            },
+        ),
+        setCurrentImageData: create.reducer(
+            (state, action: PayloadAction<ImageData | null>) => {
+                state.currentImageData = action.payload
             },
         ),
         setStrokeSize: create.reducer(
@@ -86,6 +98,20 @@ export const editorSlice = createSlice({
             )
         }),
     }),
+    extraReducers(builder) {
+        builder
+            // getting data
+            .addCase(getImageData.pending, state => {
+                state.reqStatus = ReqState.Pending
+            })
+            .addCase(getImageData.fulfilled, (state, action) => {
+                state.reqStatus = ReqState.Idle
+                state.currentImageData = action.payload
+            })
+            .addCase(getImageData.rejected, state => {
+                state.reqStatus = ReqState.Failed
+            })
+    },
     selectors: {
         selectBrushSize: state => state.brushSize,
         selectStrokeSize: state => state.strokeSize,
@@ -94,6 +120,7 @@ export const editorSlice = createSlice({
             instrumentsTypesToShapeClasses[state.currentInstrument],
         selectStrokeColor: state => state.strokeColor,
         selectFillColor: state => state.fillColor,
+        selectCurrentImageData: state => state.currentImageData,
     },
 })
 
@@ -107,6 +134,7 @@ export const {
     setStrokeSize,
     setFillColor,
     setStrokeColor,
+    setCurrentImageData,
 } = editorSlice.actions
 
 export const {
@@ -116,4 +144,5 @@ export const {
     selectFillColor,
     selectStrokeColor,
     selectCurrentInstrument,
+    selectCurrentImageData,
 } = editorSlice.selectors

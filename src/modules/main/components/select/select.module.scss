@@ -1,0 +1,29 @@
+.container {
+    position: relative;
+    display: inline-flex;
+    padding: 0;
+
+    max-width: calc(100vw - 2rem);
+}
+
+.open {
+    .icon {
+        transform: rotate(0deg);
+    }
+}
+
+.disabled {
+    * {
+        cursor: default;
+    }
+}
+
+.icon {
+    width: 0.75rem;
+    height: 0.75rem;
+    transform: rotate(180deg);
+}
+
+.noScroll {
+    overflow: hidden;
+}

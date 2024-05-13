@@ -1,4 +1,4 @@
-import type { PointerEventHandler, RefObject } from "react"
+import { useEffect, type PointerEventHandler, type RefObject } from "react"
 
 import styles from "./drawing-area.module.scss"
 

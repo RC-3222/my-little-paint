@@ -2,9 +2,14 @@ import type { ImageData } from "@appShared/types"
 
 import styles from "./item.module.scss"
 import { auth } from "@appFirebase/firebase"
-import { useSearchParams } from "react-router-dom"
+import {
+    createSearchParams,
+    useNavigate,
+    useSearchParams,
+} from "react-router-dom"
 import { Button } from "@appShared/components"
 import { useDeleteImage } from "@appModules/main/hooks/use-delete-image"
+import { Routes } from "@appShared/constants"
 
 type ItemProps = ImageData
 
@@ -23,6 +28,17 @@ export const Item = (props: ItemProps) => {
         deleteImage(props)
     }
 
+    const navigate = useNavigate()
+
+    const onEdit = () => {
+        navigate({
+            pathname: Routes.Editor,
+            search: createSearchParams({
+                imageId: props.id,
+            }).toString(),
+        })
+    }
+
     return (
         <li className={styles.item}>
             <div className={styles.header}>
@@ -39,6 +55,7 @@ export const Item = (props: ItemProps) => {
                 {auth?.currentUser?.email === userEmail && (
                     <div>
                         <Button onClick={onDelete}>Delete</Button>
+                        <Button onClick={onEdit}>Edit</Button>
                     </div>
                 )}
             </div>
