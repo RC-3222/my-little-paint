@@ -30,6 +30,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    &Buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+}
+
+.icon {
+    stroke: $clr-primary;
+    * {
+        stroke: $clr-primary;
+    }
 }
 
 .image {

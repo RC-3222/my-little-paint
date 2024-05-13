@@ -38,7 +38,7 @@ export const Options = forwardRef<HTMLDivElement, OptionsProps>(
                 ref={ref}
                 onMouseDown={handleMouseDown}
             >
-                {isLoading && <Loader />}
+                {isLoading && <Loader className={styles.loader} />}
                 {!isLoading &&
                     options.map((item, index) => {
                         const className = classNames(styles.option, {

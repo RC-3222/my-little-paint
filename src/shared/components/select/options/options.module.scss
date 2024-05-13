@@ -10,6 +10,7 @@ $clr-selected: lighten(
 );
 
 .optionsContainer {
+    box-sizing: border-box;
     --top: 0;
     --left: 0;
     --width: 0;
@@ -34,6 +35,19 @@ $clr-selected: lighten(
     &::-webkit-scrollbar {
         display: none;
     }
+
+    &:has(.loader) {
+        min-height: 12rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.loader {
+    width: 50%;
+    height: 50%;
 }
 
 .option {

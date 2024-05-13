@@ -3,18 +3,15 @@ import { createAppSlice } from "@appStore"
 import { getData } from "./thunks"
 import type { ImageData } from "@appShared/types"
 import type { PayloadAction } from "@reduxjs/toolkit"
-//import { type Query } from "firebase/firestore";
 
 export interface MainSliceState {
     data: ImageData[]
-    status: ReqState
-    //currentQuery: Query | null
+    reqStatus: ReqState
 }
 
 const initialState: MainSliceState = {
     data: [],
-    //currentQuery: null,
-    status: ReqState.Idle,
+    reqStatus: ReqState.Idle,
 }
 
 export const mainSlice = createAppSlice({
@@ -27,23 +24,23 @@ export const mainSlice = createAppSlice({
     }),
     extraReducers(builder) {
         builder
-            // getting data
             .addCase(getData.pending, state => {
-                state.status = ReqState.Pending
+                state.reqStatus = ReqState.Pending
             })
             .addCase(getData.fulfilled, (state, action) => {
-                state.status = ReqState.Idle
+                state.reqStatus = ReqState.Idle
                 state.data = action.payload
             })
             .addCase(getData.rejected, state => {
-                state.status = ReqState.Failed
+                state.reqStatus = ReqState.Failed
             })
     },
     selectors: {
         selectData: state => state.data,
+        selectRequestStatus: state => state.reqStatus,
     },
 })
 
 export const { deleteImage } = mainSlice.actions
 
-export const { selectData } = mainSlice.selectors
+export const { selectData, selectRequestStatus } = mainSlice.selectors

@@ -125,7 +125,7 @@ export const Select = ({
                     value === null
                         ? ""
                         : options.find(item => item.value === value)?.title ||
-                          ""
+                          (value as string)
                 }
                 disabled={disabled}
                 rightIcon={

@@ -121,6 +121,7 @@ export const editorSlice = createSlice({
         selectStrokeColor: state => state.strokeColor,
         selectFillColor: state => state.fillColor,
         selectCurrentImageData: state => state.currentImageData,
+        selectRequestStatus: state => state.reqStatus,
     },
 })
 
@@ -145,4 +146,5 @@ export const {
     selectStrokeColor,
     selectCurrentInstrument,
     selectCurrentImageData,
+    selectRequestStatus,
 } = editorSlice.selectors

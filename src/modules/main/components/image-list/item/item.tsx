@@ -10,6 +10,7 @@ import {
 import { Button } from "@appShared/components"
 import { useDeleteImage } from "@appModules/main/hooks/use-delete-image"
 import { Routes } from "@appShared/constants"
+import { DeleteIcon, EditIcon } from "./icons"
 
 type ItemProps = ImageData
 
@@ -53,9 +54,21 @@ export const Item = (props: ItemProps) => {
                     </button>{" "}
                 </h4>
                 {auth?.currentUser?.email === userEmail && (
-                    <div>
-                        <Button onClick={onDelete}>Delete</Button>
-                        <Button onClick={onEdit}>Edit</Button>
+                    <div className={styles.headerButtons}>
+                        <Button variant="secondary" onClick={onDelete}>
+                            <DeleteIcon
+                                className={styles.icon}
+                                width={24}
+                                height={24}
+                            />
+                        </Button>
+                        <Button variant="secondary" onClick={onEdit}>
+                            <EditIcon
+                                className={styles.icon}
+                                width={24}
+                                height={24}
+                            />
+                        </Button>
                     </div>
                 )}
             </div>

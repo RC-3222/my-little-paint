@@ -24,6 +24,11 @@
     }
 
     justify-content: space-between;
+
+    &Buttons {
+        display: flex;
+        gap: 1rem;
+    }
 }
 
 .title {
@@ -32,6 +37,14 @@
 
     font-size: 2rem;
     font-weight: 700;
+}
+
+.imageTitle {
+    margin: 0;
+    padding: 0;
+
+    font-size: 1.75rem;
+    font-weight: 500;
 }
 
 .main {

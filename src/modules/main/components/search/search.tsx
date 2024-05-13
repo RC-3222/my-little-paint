@@ -1,33 +1,23 @@
-import styles from "./search.module.scss"
-
-import SearchIcon from "./search-icon.svg?react"
-import { createErrorToast } from "@appShared/utils"
 import { useSearchParams } from "react-router-dom"
-import { Select } from "../select"
 import { useGetUsers } from "@appModules/main/hooks"
-import type { FormEventHandler } from "react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { Select } from "@appShared/components"
 
-import { type Option } from "../select/options"
+import type { Option } from "@appShared/components/select"
 
 export const Search = () => {
-    const [_, setUrlSearchParams] = useSearchParams()
+    const [searchParams, setUrlSearchParams] = useSearchParams()
 
-    const onSubmit: FormEventHandler = e => {
-        e.preventDefault()
-        if (!value) return
+    const [open, setOpen] = useState(false)
 
-        if (value === "All")
+    const onChange = (val: string | number | null) => {
+        if (val === "All")
             setUrlSearchParams(params => {
                 params.delete("reqStr")
                 return { ...params }
             })
-        else setUrlSearchParams(params => ({ ...params, reqStr: value }))
+        else setUrlSearchParams(params => ({ ...params, reqStr: val }))
     }
-
-    const [value, setValue] = useState("All")
-
-    const [open, setOpen] = useState(false)
 
     const [options, setOptions] = useState<Option[]>([
         { value: "All", title: "All" },
@@ -51,35 +41,16 @@ export const Search = () => {
         setOpen(open)
     }
 
+    const value = searchParams.get("reqStr") ?? "All"
+
     return (
-        <form onSubmit={onSubmit} className={styles.container}>
-            <Select
-                isLoading={isLoading}
-                options={options}
-                value={value}
-                onChange={val => setValue(val as string)}
-                open={open}
-                onToggle={onToggle}
-            />
-            <button title="search" type="submit" className={styles.button}>
-                <SearchIcon />
-            </button>
-        </form>
+        <Select
+            isLoading={isLoading}
+            options={options}
+            value={value}
+            onChange={onChange}
+            open={open}
+            onToggle={onToggle}
+        />
     )
 }
-
-/*<form
-    onSubmit={onSubmit}
-    className={styles.container}
->
-    <Select isLoading={isLoading} options={options} value={value} onChange={(val)=>setValue(val as string)} open={open} onToggle={onToggle} />
-    <button title="search" type="submit" className={styles.button}>
-        <SearchIcon />
-    </button>
-</form>*/
-
-/*<SearchInput
-className={styles.input}
-errorClassName={styles.input_error}
-name="reqStr"
-/>*/

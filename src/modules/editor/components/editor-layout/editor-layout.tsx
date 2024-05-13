@@ -2,7 +2,7 @@ import { StickyHeader } from "@appShared/components/sticky-header/sticky-header"
 import { DrawingArea } from "../drawing-area"
 
 import styles from "./editor-layout.module.scss"
-import { Button } from "@appShared/components"
+import { Button, Loader } from "@appShared/components"
 import { InstrumentPanel } from "../instrument-panel/instrument-panel"
 import { useCanvas, useCanvasImageData } from "@appModules/editor/hooks"
 import { useEffect, useRef, useState } from "react"
@@ -14,8 +14,10 @@ import { useAppDispatch, useAppSelector } from "@appStore"
 import { getImageData } from "@appModules/editor/store/thunks"
 import {
     selectCurrentImageData,
+    selectRequestStatus,
     setCurrentImageData,
 } from "@appModules/editor/store"
+import { ReqState } from "@appShared/constants"
 
 export const EditorLayout = () => {
     const canvasDataRef = useRef<CanvasData>({ isDrawing: false })
@@ -57,8 +59,9 @@ export const EditorLayout = () => {
         if (imageId && imageId !== currentImageData?.id) {
             dispatch(getImageData(imageId))
         }
-        //firebaseGetUsers().then((data)=>console.log(data)).catch(err=>console.error(err))
     }, [currentImageData?.id, dispatch, imageId])
+
+    const reqState = useAppSelector(selectRequestStatus)
 
     useEffect(() => {
         return () => {
@@ -70,26 +73,37 @@ export const EditorLayout = () => {
         <>
             <StickyHeader className={styles.header}>
                 <h2 className={styles.title}>Editor</h2>
-                <Button
-                    variant={"secondary"}
-                    onClick={() => setIsSaveFormOpen(true)}
-                >
-                    Save
-                </Button>
-                <Button variant={"secondary"} onClick={restartHandler}>
-                    restart
-                </Button>
+                {currentImageData && (
+                    <h3 className={styles.imageTitle}>
+                        {currentImageData.imageName}
+                    </h3>
+                )}
+                <div className={styles.headerButtons}>
+                    <Button
+                        variant={"secondary"}
+                        onClick={() => setIsSaveFormOpen(true)}
+                    >
+                        Save
+                    </Button>
+                    <Button variant={"secondary"} onClick={restartHandler}>
+                        Restart
+                    </Button>
+                </div>
             </StickyHeader>
             <InstrumentPanel />
             <main className={styles.main}>
-                <DrawingArea
-                    canvasRef={mainCanvasRef}
-                    previewRef={previewCanvasRef}
-                    onPointerDown={pointerDownHandler}
-                    onPointerMove={pointerMoveHandler}
-                    onPointerUp={stopDrawingHandler}
-                    onPointerLeave={stopDrawingHandler}
-                />
+                {reqState === ReqState.Pending ? (
+                    <Loader />
+                ) : (
+                    <DrawingArea
+                        canvasRef={mainCanvasRef}
+                        previewRef={previewCanvasRef}
+                        onPointerDown={pointerDownHandler}
+                        onPointerMove={pointerMoveHandler}
+                        onPointerUp={stopDrawingHandler}
+                        onPointerLeave={stopDrawingHandler}
+                    />
+                )}
             </main>
             {isSaveFormOpen && (
                 <SaveImageForm

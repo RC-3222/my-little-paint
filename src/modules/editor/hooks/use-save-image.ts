@@ -6,7 +6,7 @@ import { createErrorToast } from "@appShared/utils"
 import { useAppDispatch, useAppSelector } from "@appStore"
 import { useState } from "react"
 import { selectCurrentImageData, setCurrentImageData } from "../store"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 
 export function useSaveImage() {
     const [isLoading, setIsLoading] = useState(false)
