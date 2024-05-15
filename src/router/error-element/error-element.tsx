@@ -12,7 +12,7 @@ export const ErrorElement = () => {
     }, [])
 
     return (
-        <main className={styles.main}>
+        <div className={styles.errorContainer}>
             <Card className={styles.errorCard}>
                 <h2 className={styles.title}>Oops! Something went wrong...</h2>
                 <p className={styles.text}>
@@ -36,6 +36,6 @@ export const ErrorElement = () => {
                     </a>
                 </p>
             </Card>
-        </main>
+        </div>
     )
 }

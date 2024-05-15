@@ -1,0 +1,40 @@
+@use "@appShared/scss" as *;
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+
+    z-index: 5;
+
+    box-sizing: border-box;
+    background-color: $clr-primary;
+    color: $clr-secondary;
+
+    padding: 1rem 3rem 1.5rem;
+
+    display: flex;
+
+    height: $height-header;
+
+    width: max(100vw, 100%);
+
+    align-items: center;
+
+    overflow-x: scroll;
+
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    justify-content: space-between;
+
+    &Buttons {
+        display: flex;
+        gap: 1rem;
+    }
+}

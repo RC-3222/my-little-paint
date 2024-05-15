@@ -1,8 +1,7 @@
-import { StickyHeader } from "@appShared/components/sticky-header/sticky-header"
 import { DrawingArea } from "../drawing-area"
 
 import styles from "./editor-layout.module.scss"
-import { Button, Loader } from "@appShared/components"
+import { Loader } from "@appShared/components"
 import { InstrumentPanel } from "../instrument-panel/instrument-panel"
 import { useCanvas, useCanvasImageData } from "@appModules/editor/hooks"
 import { useEffect, useRef, useState } from "react"
@@ -71,26 +70,10 @@ export const EditorLayout = () => {
 
     return (
         <>
-            <StickyHeader className={styles.header}>
-                <h2 className={styles.title}>Editor</h2>
-                {currentImageData && (
-                    <h3 className={styles.imageTitle}>
-                        {currentImageData.imageName}
-                    </h3>
-                )}
-                <div className={styles.headerButtons}>
-                    <Button
-                        variant={"secondary"}
-                        onClick={() => setIsSaveFormOpen(true)}
-                    >
-                        Save
-                    </Button>
-                    <Button variant={"secondary"} onClick={restartHandler}>
-                        Restart
-                    </Button>
-                </div>
-            </StickyHeader>
-            <InstrumentPanel />
+            <InstrumentPanel
+                onRestart={restartHandler}
+                onSave={() => setIsSaveFormOpen(true)}
+            />
             <main className={styles.main}>
                 {reqState === ReqState.Pending ? (
                     <Loader />

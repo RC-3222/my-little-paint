@@ -1,40 +1,5 @@
 @use "@appShared/scss" as *;
 
-.header {
-    box-sizing: border-box;
-    background-color: $clr-primary;
-    color: $clr-secondary;
-
-    padding: 1rem 3rem 1.5rem;
-
-    display: flex;
-
-    height: $height-header;
-
-    width: max(100vw, 100%);
-
-    align-items: center;
-
-    overflow-x: scroll;
-
-    overflow-y: hidden;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    justify-content: space-between;
-
-    &__rightSide,
-    &__leftSide {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-
-        gap: 1rem;
-    }
-}
-
 .main {
     box-sizing: border-box;
 

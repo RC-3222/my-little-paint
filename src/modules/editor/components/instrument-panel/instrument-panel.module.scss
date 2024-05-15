@@ -26,3 +26,9 @@
         width: min(95vw, 40rem);
     }
 }
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}

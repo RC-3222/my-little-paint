@@ -1,52 +1,5 @@
 @use "@appShared/scss" as *;
 
-.header {
-    box-sizing: border-box;
-    background-color: $clr-primary;
-    color: $clr-secondary;
-
-    padding: 1rem 3rem 1.5rem;
-
-    display: flex;
-
-    height: $height-header;
-
-    width: max(100vw, 100%);
-
-    align-items: center;
-
-    overflow-x: scroll;
-
-    overflow-y: hidden;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    justify-content: space-between;
-
-    &Buttons {
-        display: flex;
-        gap: 1rem;
-    }
-}
-
-.title {
-    margin: 0;
-    padding: 0;
-
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.imageTitle {
-    margin: 0;
-    padding: 0;
-
-    font-size: 1.75rem;
-    font-weight: 500;
-}
-
 .main {
     box-sizing: border-box;
 

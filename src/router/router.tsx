@@ -24,18 +24,22 @@ const router = createBrowserRouter([
             {
                 path: Routes.Main,
                 element: <Main />,
+                errorElement: <ErrorElement />,
             },
             {
                 path: Routes.Editor,
                 element: <Editor />,
+                errorElement: <ErrorElement />,
             },
             {
                 path: Routes.Root,
                 element: <Navigate to={Routes.Main} replace />,
+                errorElement: <ErrorElement />,
             },
             {
                 path: Routes.Fallback,
                 element: <Navigate to={Routes.Main} replace />,
+                errorElement: <ErrorElement />,
             },
         ],
     },

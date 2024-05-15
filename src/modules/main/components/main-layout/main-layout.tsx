@@ -1,11 +1,7 @@
-import { Button, Loader, StickyHeader } from "@appShared/components"
-import { AppTitle } from "../app-title"
-import { NavPanel } from "../nav-panel"
-import { Search } from "../search"
+import { Loader } from "@appShared/components"
 
 import styles from "./main-layout.module.scss"
 import { useAppDispatch, useAppSelector } from "@appStore"
-import { signOut } from "@appModules/auth"
 import { useEffect } from "react"
 import {
     getData,
@@ -35,33 +31,14 @@ export const MainLayout = () => {
     const reqStatus = useAppSelector(selectRequestStatus)
 
     return (
-        <>
-            <StickyHeader className={styles.header}>
-                <div className={styles.header__leftSide}>
-                    <AppTitle />
-                    <Search />
-                </div>
-                <div className={styles.header__rightSide}>
-                    <NavPanel />
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            dispatch(signOut())
-                        }}
-                    >
-                        Sign Out
-                    </Button>
-                </div>
-            </StickyHeader>
-            <main className={styles.main}>
-                <div className={styles.content}>
-                    {reqStatus === ReqState.Pending ? (
-                        <Loader className={styles.loader} />
-                    ) : (
-                        <ImageList data={data} />
-                    )}
-                </div>
-            </main>
-        </>
+        <main className={styles.main}>
+            <div className={styles.content}>
+                {reqStatus === ReqState.Pending ? (
+                    <Loader className={styles.loader} />
+                ) : (
+                    <ImageList data={data} />
+                )}
+            </div>
+        </main>
     )
 }
