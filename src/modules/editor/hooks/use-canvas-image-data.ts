@@ -21,7 +21,6 @@ export const useCanvasImageData = ({ mainCanvasRef }: Args) => {
             const context = mainCanvasRef.current?.getContext("2d")
 
             if (mainCanvasRef.current && context) {
-                //context.clearRect(0,0,mainCanvasRef.current.width,mainCanvasRef.current.height);
                 context.drawImage(image, 0, 0)
             }
         }
