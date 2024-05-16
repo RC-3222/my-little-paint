@@ -1,0 +1,46 @@
+@use "@appShared/scss" as *;
+
+.errorContainer {
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+    width: 100vw;
+
+    overflow: hidden;
+
+    background: $bg-gradient--error;
+}
+.errorCard {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    max-height: 95%;
+
+    overflow: scroll;
+
+    width: min(32rem, 95%);
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.title {
+    margin: 0;
+    padding: 0;
+
+    color: $clr-danger;
+
+    text-align: center;
+    width: 100%;
+}
+
+.text {
+    margin: 0;
+    padding: 0;
+}

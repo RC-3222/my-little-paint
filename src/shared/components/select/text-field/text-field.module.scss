@@ -1,0 +1,403 @@
+@use "@appShared/scss" as *;
+
+.container {
+    background-color: inherit;
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: top;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4375em;
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+.textField {
+    display: inline-flex;
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.125rem;
+        border-bottom: 0.125rem solid $clr-secondary;
+        transform: scaleX(0);
+        transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0s;
+    }
+
+    gap: 0.5em;
+}
+
+.label {
+    color: lighten($color: #444, $amount: 3);
+    position: absolute;
+    left: 0.625rem;
+    top: 0.9375rem;
+    padding: 0 4px;
+    pointer-events: none;
+    transition:
+        font-size 0.2s,
+        top 0.2s;
+    max-width: calc(100% - 1.25rem);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.input {
+    font: inherit;
+    color: #444;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0;
+    display: block;
+    padding: 0.875rem 0.875rem 1rem;
+    outline: none;
+    border: none;
+    width: 100%;
+
+    &:not(:placeholder-shown) ~ .label,
+    &:focus ~ .label {
+        font-size: 0.75rem;
+    }
+}
+
+.errorText {
+    color: $clr-danger;
+    font-size: 0.75rem;
+    display: none;
+    margin: 0.1875rem 0.875rem 0;
+}
+
+.outlined {
+    //background-color: inherit;
+    border: 0.125rem solid #444;
+    border-radius: 0.25rem;
+
+    .label {
+        top: 0.75rem;
+        //background-color: inherit;
+    }
+
+    &:hover {
+        border-color: lighten($color: #444, $amount: 15);
+    }
+
+    .input {
+        border-radius: 0.25rem;
+
+        &:not(:placeholder-shown) ~ .label,
+        &:focus ~ .label {
+            top: -0.75rem;
+            background-size: cover;
+        }
+    }
+
+    .input {
+        padding: 1.5rem 0.875rem 0.5rem;
+
+        &:not(:placeholder-shown) ~ .label,
+        &:focus ~ .label {
+            font-size: 0.75rem;
+            top: 0.3125rem;
+        }
+    }
+    &:has(.rightIcon),
+    &:has(.leftIcon) {
+        position: relative;
+
+        cursor: pointer;
+
+        * {
+            cursor: pointer;
+        }
+
+        input {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    &:has(.rightIcon) {
+        input {
+            padding-right: 2rem;
+        }
+
+        .rightIcon {
+            position: absolute;
+
+            width: 1rem;
+            height: 1rem;
+
+            top: 1.5rem;
+            right: 0.5rem;
+        }
+    }
+
+    &:has(.leftIcon) {
+        input {
+            padding-left: 2rem;
+        }
+
+        .leftIcon {
+            & ~ .label {
+                top: 0.3125rem;
+                font-size: 0.75rem;
+            }
+
+            position: absolute;
+
+            width: 1rem;
+            height: 1rem;
+
+            top: 1.5rem;
+            left: 1rem;
+        }
+    }
+}
+
+.filled {
+    background-color: lighten($color: #4444, $amount: 24);
+
+    border-bottom: 0.125rem solid lighten($color: #444, $amount: 8);
+    border-radius: 0.25rem 0.25rem 0 0;
+
+    &:hover {
+        background-color: lighten($color: #4444, $amount: 32);
+        border-color: lighten($color: #444, $amount: 14);
+    }
+
+    .input {
+        padding: 1.5rem 1rem 0.5rem;
+
+        &:not(:placeholder-shown) ~ .label,
+        &:focus ~ .label {
+            font-size: 0.75rem;
+            top: 0.3125rem;
+        }
+    }
+    &:has(.rightIcon),
+    &:has(.leftIcon) {
+        position: relative;
+
+        cursor: pointer;
+
+        * {
+            cursor: pointer;
+        }
+
+        input {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    &:has(.rightIcon) {
+        input {
+            padding-right: 2rem;
+        }
+
+        .rightIcon {
+            position: absolute;
+
+            width: 1rem;
+            height: 1rem;
+
+            top: 1.5rem;
+            right: 0.5rem;
+        }
+    }
+
+    &:has(.leftIcon) {
+        input {
+            padding-left: 2rem;
+        }
+
+        .leftIcon {
+            & ~ .label {
+                top: 0.3125rem;
+                font-size: 0.75rem;
+            }
+
+            position: absolute;
+
+            width: 1rem;
+            height: 1rem;
+
+            top: 1.5rem;
+            left: 1rem;
+        }
+    }
+}
+
+.standart {
+    border-bottom: 0.125rem solid darken($color: #4444, $amount: 4);
+
+    &:hover {
+        border-color: darken($color: #4444, $amount: 42);
+    }
+
+    .input {
+        padding: 0.25rem 0 0.3125rem;
+        margin-top: 1rem;
+
+        &:not(:placeholder-shown) ~ .label,
+        &:focus ~ .label {
+            top: -0.25rem;
+        }
+    }
+
+    .label {
+        left: 0;
+        top: 1.25rem;
+        padding: 0;
+        max-width: 100%;
+    }
+
+    &:has(.rightIcon),
+    &:has(.leftIcon) {
+        position: relative;
+
+        cursor: pointer;
+
+        * {
+            cursor: pointer;
+        }
+
+        input {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    &:has(.rightIcon) {
+        input {
+            padding-right: 1.5rem;
+        }
+
+        .rightIcon {
+            position: absolute;
+
+            width: 1rem;
+            height: 1rem;
+
+            top: 1.375rem;
+            right: 0.25rem;
+        }
+    }
+
+    &:has(.leftIcon) {
+        input {
+            padding-left: 1.5rem;
+        }
+
+        .leftIcon {
+            & ~ .label {
+                top: -0.25rem;
+                font-size: 0.75rem;
+            }
+
+            position: absolute;
+
+            width: 1rem;
+            height: 1rem;
+
+            top: 1.375rem;
+            left: 0.25rem;
+        }
+    }
+}
+
+.container:not(.error) {
+    .input:focus ~ .label {
+        color: $clr-primary;
+    }
+
+    .outlined {
+        &:has(> .input:focus) {
+            border-color: $clr-primary;
+        }
+    }
+
+    .standart {
+        &:has(> .input:focus) {
+            &::after {
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    .filled {
+        &:has(> .input:focus) {
+            &::after {
+                transform: scaleX(1);
+            }
+        }
+
+        &:hover {
+            background-color: lighten($color: #4444, $amount: 42);
+        }
+    }
+}
+
+.error {
+    .label {
+        color: $clr-danger;
+    }
+
+    .errorText {
+        display: inline;
+    }
+
+    .outlined {
+        border-color: $clr-danger;
+    }
+
+    .textField::after {
+        border-color: $clr-danger;
+    }
+
+    .filled,
+    .standart {
+        border-color: $clr-danger;
+    }
+
+    .standart ~ .errorText {
+        margin: 0.1875rem 0 0;
+    }
+}
+
+.disabled {
+    * {
+        cursor: default;
+    }
+
+    .label {
+        color: rgba(0, 0, 0, 0.38);
+    }
+
+    .standart:hover,
+    .filled:hover {
+        border-color: rgba(0, 0, 0, 0.42);
+    }
+
+    .input:hover {
+        border-color: rgba(0, 0, 0, 0.23);
+    }
+
+    .filled {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
+
+    .standart,
+    .filled {
+        border-bottom-style: dotted;
+    }
+}

@@ -1,36 +1,37 @@
-import { storage, db } from "@appFirebase/firebase"
+import {
+    firebaseAddImage,
+    firebaseIncrementUserImageCounter,
+} from "@appFirebase/api"
 import { createErrorToast } from "@appShared/utils"
-import type { User } from "firebase/auth"
-import { addDoc, collection } from "firebase/firestore"
-import { ref, uploadString, getDownloadURL } from "firebase/storage"
+import { useAppDispatch, useAppSelector } from "@appStore"
 import { useState } from "react"
-import { v4 as uuidv4 } from "uuid"
+import { selectCurrentImageData, setCurrentImageData } from "../store"
+import { useSearchParams } from "react-router-dom"
 
-export function useSaveImage(user: User | null) {
+export function useSaveImage() {
     const [isLoading, setIsLoading] = useState(false)
+
+    const dispatch = useAppDispatch()
+
+    const currentImageData = useAppSelector(selectCurrentImageData)
+
+    const [_, setParams] = useSearchParams()
 
     const saveImage = async (imageName: string, imgDataUrl: string) => {
         setIsLoading(true)
-
         try {
-            const id = uuidv4()
-            const storageRef = ref(storage, `images/${id}.png`)
-
-            const snapshot = await uploadString(
-                storageRef,
+            const data = await firebaseAddImage(
+                imageName,
                 imgDataUrl,
-                "data_url",
+                currentImageData ?? undefined,
             )
-            const downloadURL = await getDownloadURL(snapshot.ref)
-
-            await addDoc(collection(db, "images"), {
-                imageName: imageName,
-                imageUrl: downloadURL,
-                createAt: new Date(),
-                userName: user?.displayName,
-                userEmail: user?.email,
-                storagePath: `images/${id}.png`,
-            })
+            if (data) {
+                if (!currentImageData) await firebaseIncrementUserImageCounter()
+                dispatch(setCurrentImageData(data))
+                setParams(params => ({ ...params, imageId: data.id }), {
+                    replace: true,
+                })
+            }
         } catch (e) {
             let errorMessage = "Error while saving your image"
 

@@ -1,0 +1,90 @@
+@use "@appShared/scss" as *;
+
+.item {
+    position: relative;
+
+    box-sizing: border-box;
+
+    //min-width: min(24rem, 95%);
+    width: 100%;
+    height: 100%;
+
+    padding: 1.25rem 1.5rem;
+
+    background-color: lighten(desaturate($clr-primary, 30), 40);
+
+    box-shadow: 0px 4px 8px 0px $clr-shadow;
+
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.header {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &Buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+}
+
+.icon {
+    stroke: $clr-primary;
+    * {
+        stroke: $clr-primary;
+    }
+}
+
+.image {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+
+    &Container {
+        box-sizing: border-box;
+        background-color: $clr-secondary;
+
+        width: 95%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.clickableEmail {
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+
+    color: $clr-primary;
+
+    padding: 0;
+
+    background-color: transparent;
+}
+
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.4);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

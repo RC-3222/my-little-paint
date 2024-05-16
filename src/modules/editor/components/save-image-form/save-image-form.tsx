@@ -8,11 +8,11 @@ import {
 import styles from "./save-image-form.module.scss"
 import { SaveImgSchema } from "@appModules/editor/schemas"
 import type { TypeOf } from "zod"
-import { auth } from "@appFirebase/firebase"
 import { useSaveImage } from "@appModules/editor/hooks"
-import type { User } from "firebase/auth"
 import { useEffect, type RefObject } from "react"
 import { Backdrop } from "@appShared/components/backdrop"
+import { useAppSelector } from "@appStore"
+import { selectCurrentImageData } from "@appModules/editor/store"
 
 type SaveImageFormProps = {
     canvasRef: RefObject<HTMLCanvasElement>
@@ -20,7 +20,9 @@ type SaveImageFormProps = {
 }
 
 export const SaveImageForm = ({ onClose, canvasRef }: SaveImageFormProps) => {
-    const { saveImage, isLoading } = useSaveImage(auth.currentUser as User)
+    const { saveImage, isLoading } = useSaveImage()
+
+    const currentImageData = useAppSelector(selectCurrentImageData)
 
     const onSubmit = async ({ imgName }: TypeOf<typeof SaveImgSchema>) => {
         const dataUrl = canvasRef.current?.toDataURL()
@@ -56,11 +58,14 @@ export const SaveImageForm = ({ onClose, canvasRef }: SaveImageFormProps) => {
                 }}
             >
                 <Form
+                    defaultValues={{ imgName: currentImageData?.imageName }}
                     schema={SaveImgSchema}
                     onSubmit={onSubmit}
                     className={styles.form}
                 >
-                    <h2>Save Image</h2>
+                    <h2>
+                        {currentImageData ? "Save edited Image" : "Save Image"}
+                    </h2>
                     <FormInput label="Image name" type="text" name="imgName" />
                     <FormSubmitButton>Save</FormSubmitButton>
                 </Form>

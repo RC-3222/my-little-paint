@@ -1,0 +1,38 @@
+@use "@appShared/scss" as *;
+
+.main {
+    box-sizing: border-box;
+
+    width: 100vw;
+
+    background: $bg-gradient;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content {
+    box-sizing: border-box;
+
+    padding: 2rem 3rem;
+
+    background-color: $clr-secondary;
+
+    padding-top: $height-header;
+
+    min-height: 100vh;
+
+    width: min(80rem, 100%);
+
+    &:has(.loader) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.loader {
+    height: 64px;
+    width: 64px;
+}

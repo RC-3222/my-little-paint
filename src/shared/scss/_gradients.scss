@@ -4,3 +4,10 @@ $bg-gradient: linear-gradient(
     darken($clr-primary, 3) 50%,
     darken($clr-primary, 9) 85%
 );
+
+$bg-gradient--error: linear-gradient(
+    90deg,
+    darken($clr-danger, 9) 15%,
+    darken($clr-danger, 3) 50%,
+    darken($clr-danger, 9) 85%
+);
