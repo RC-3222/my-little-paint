@@ -20,8 +20,9 @@ import {
     uploadString,
 } from "firebase/storage"
 import type { ImageData } from "@appShared/types"
+import { MAX_IMAGES_PER_PAGE } from "@appModules/main/constants"
 
-export async function firebaseGetData(email?: string) {
+export async function firebaseGetData(email?: string, pageNum = 0) {
     const q = email
         ? query(
               imagesRef,
@@ -32,10 +33,20 @@ export async function firebaseGetData(email?: string) {
 
     const docs = await getDocs(q)
 
-    return docs.docs.map(doc => {
-        const data = doc.data()
-        return { ...data, id: doc.id, createAt: data?.createAt?.seconds }
-    })
+    const startIndex = pageNum * MAX_IMAGES_PER_PAGE
+    const endIndex = startIndex + MAX_IMAGES_PER_PAGE
+
+    const data = docs.docs
+        .map(doc => {
+            const data = doc.data()
+            return { ...data, id: doc.id, createAt: data?.createAt?.seconds }
+        })
+        .slice(startIndex, endIndex) as ImageData[]
+
+    return {
+        data,
+        pageCount: Math.ceil(docs.docs.length / MAX_IMAGES_PER_PAGE),
+    }
 }
 
 export async function firebaseGetImage(id?: string) {

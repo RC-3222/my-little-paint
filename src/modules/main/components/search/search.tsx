@@ -13,7 +13,8 @@ export const Search = () => {
     const onChange = (val: string | number | null) => {
         if (val === "All")
             setUrlSearchParams(params => {
-                params.delete("reqStr")
+                params.delete("email")
+                params.delete("pageNum")
                 return { ...params }
             })
         else setUrlSearchParams(params => ({ ...params, reqStr: val }))

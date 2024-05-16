@@ -6,11 +6,13 @@ import { useEffect } from "react"
 import {
     getData,
     selectData,
+    selectPageCount,
     selectRequestStatus,
 } from "@appModules/main/store"
 import { ImageList } from "../image-list"
 import { useSearchParams } from "react-router-dom"
 import { ReqState } from "@appShared/constants"
+import { PaginationControls } from "../pagination-controls"
 //import { firebaseGetUsers } from "@appFirebase/api"
 
 export const MainLayout = () => {
@@ -18,15 +20,22 @@ export const MainLayout = () => {
 
     const data = useAppSelector(selectData)
 
+    const pageCount = useAppSelector(selectPageCount)
+
     const [urlParams] = useSearchParams()
 
-    const searchParam = urlParams.get("reqStr")
+    const email = urlParams.get("email")
+    const pageNum = urlParams.get("pageNum")
 
     useEffect(() => {
-        dispatch(getData(searchParam ?? undefined))
-
+        dispatch(
+            getData({
+                email: email ?? undefined,
+                pageNum: pageNum ? +pageNum : 0,
+            }),
+        )
         //firebaseGetUsers().then((data)=>console.log(data)).catch(err=>console.error(err))
-    }, [searchParam, dispatch])
+    }, [email, pageNum, dispatch])
 
     const reqStatus = useAppSelector(selectRequestStatus)
 
@@ -36,7 +45,10 @@ export const MainLayout = () => {
                 {reqStatus === ReqState.Pending ? (
                     <Loader className={styles.loader} />
                 ) : (
-                    <ImageList data={data} />
+                    <>
+                        <ImageList data={data} />
+                        {pageCount > 1 && <PaginationControls />}
+                    </>
                 )}
             </div>
         </main>
