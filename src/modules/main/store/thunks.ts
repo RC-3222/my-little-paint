@@ -1,28 +1,26 @@
+import type { QueryDirections } from "@appFirebase/api"
 import { firebaseGetData } from "@appFirebase/api"
 //import type { ImageData } from "@appShared/types"
-import { createErrorToast } from "@appShared/utils"
+import { isValidError, createErrorToast } from "@appShared/utils"
 import { createAsyncThunk } from "@reduxjs/toolkit/react"
 
 type GetDataArgs = {
-    email?: string
-    pageNum?: number
+    email: string | null
+    docId: string | null
+    queryDirection: QueryDirections | null
 }
 
 export const getData = createAsyncThunk(
     "main/getData",
-    async ({ email, pageNum }: GetDataArgs) => {
+    async (args: GetDataArgs) => {
         try {
-            const resData = await firebaseGetData(email, pageNum)
+            const resData = await firebaseGetData(args)
 
-            const { data, pageCount } = resData
-
-            console.log(resData)
-
-            return { data, pageCount }
+            return resData
         } catch (err) {
-            let errorMessage = "Unknown error"
+            let errorMessage = isValidError(err) ? err.message : "Unknown error"
 
-            console.log(err)
+            console.error(err)
             createErrorToast(errorMessage, "dataGettingError")
 
             throw new Error(errorMessage)

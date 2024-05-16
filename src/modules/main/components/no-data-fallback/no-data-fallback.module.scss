@@ -1,0 +1,24 @@
+@use "@appShared/scss" as *;
+
+.container {
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 100%;
+
+    padding: 2rem;
+
+    width: 100%;
+}
+
+.title {
+    font-size: 2rem;
+    color: $clr-danger;
+    margin: 0;
+    padding: 0.25rem;
+}

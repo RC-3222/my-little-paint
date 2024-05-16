@@ -1,37 +1,55 @@
 import { useSearchParams } from "react-router-dom"
 import styles from "./pagination-controls.module.scss"
 import { useAppSelector } from "@appStore"
-import { selectPageCount } from "@appModules/main/store"
+import {
+    selectData,
+    selectHasNextPage,
+    selectHasPrevPage,
+} from "@appModules/main/store"
 import { Button } from "@appShared/components"
+import type { QueryDirections } from "@appFirebase/api"
+import { useCallback } from "react"
+import { UrlParams } from "@appModules/main/constants"
 
 export const PaginationControls = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const param = searchParams.get("pageNum")
-    const pageNum = param ? +param : 0
+    const data = useAppSelector(selectData)
 
-    const pageCount = useAppSelector(selectPageCount)
+    const hasPrevPage = useAppSelector(selectHasPrevPage)
+    const hasNextPage = useAppSelector(selectHasNextPage)
 
-    const updatePageNum = (newPageNum: number) => {
-        setSearchParams(prevParams => ({ ...prevParams, pageNum: newPageNum }))
-    }
+    const [_, setSearchParams] = useSearchParams()
+
+    const changePage = useCallback(
+        (docId: string, queryDirection: QueryDirections) => {
+            setSearchParams(prevParams => {
+                //const email = prevParams.get("email");
+                const email = prevParams.get(UrlParams.Email) ?? undefined
+                const newParams = {
+                    ...prevParams,
+                    email,
+                    [UrlParams.DocId]: docId,
+                    [UrlParams.QueryDirection]: queryDirection,
+                }
+                return newParams
+            })
+        },
+        [setSearchParams],
+    )
 
     return (
         <div className={styles.container}>
-            {pageNum - 1 > 0 && (
-                <Button onClick={() => updatePageNum(0)}>First</Button>
-            )}
-            {pageNum > 0 && (
-                <Button onClick={() => updatePageNum(pageNum - 1)}>
+            {hasPrevPage && (
+                <Button onClick={() => changePage(data[0].id, "before")}>
                     Previous
                 </Button>
             )}
-            <span className={styles.pageNum}>{pageNum + 1}</span>
-            {pageNum + 1 < pageCount && (
-                <Button onClick={() => updatePageNum(pageNum + 1)}>Next</Button>
-            )}
-            {pageNum + 2 < pageCount && (
-                <Button onClick={() => updatePageNum(pageCount - 1)}>
-                    Last
+            {hasNextPage && (
+                <Button
+                    onClick={() =>
+                        changePage(data[data.length - 1].id, "after")
+                    }
+                >
+                    Next
                 </Button>
             )}
         </div>

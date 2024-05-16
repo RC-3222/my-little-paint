@@ -6,36 +6,41 @@ import { useEffect } from "react"
 import {
     getData,
     selectData,
-    selectPageCount,
+    selectHasNextPage,
+    selectHasPrevPage,
     selectRequestStatus,
 } from "@appModules/main/store"
 import { ImageList } from "../image-list"
 import { useSearchParams } from "react-router-dom"
 import { ReqState } from "@appShared/constants"
 import { PaginationControls } from "../pagination-controls"
-//import { firebaseGetUsers } from "@appFirebase/api"
+import type { QueryDirections } from "@appFirebase/api"
+import { NoDataFallback } from "../no-data-fallback"
+import { UrlParams } from "@appModules/main/constants"
 
 export const MainLayout = () => {
     const dispatch = useAppDispatch()
 
     const data = useAppSelector(selectData)
 
-    const pageCount = useAppSelector(selectPageCount)
-
     const [urlParams] = useSearchParams()
 
-    const email = urlParams.get("email")
-    const pageNum = urlParams.get("pageNum")
+    const email = urlParams.get(UrlParams.Email)
+    const direction = urlParams.get(UrlParams.QueryDirection)
+    const docId = urlParams.get(UrlParams.DocId)
+
+    const hasPrevPage = useAppSelector(selectHasPrevPage)
+    const hasNextPage = useAppSelector(selectHasNextPage)
 
     useEffect(() => {
         dispatch(
             getData({
-                email: email ?? undefined,
-                pageNum: pageNum ? +pageNum : 0,
+                email: email,
+                queryDirection: direction as QueryDirections,
+                docId: docId,
             }),
         )
-        //firebaseGetUsers().then((data)=>console.log(data)).catch(err=>console.error(err))
-    }, [email, pageNum, dispatch])
+    }, [email, direction, docId, dispatch])
 
     const reqStatus = useAppSelector(selectRequestStatus)
 
@@ -46,8 +51,12 @@ export const MainLayout = () => {
                     <Loader className={styles.loader} />
                 ) : (
                     <>
-                        <ImageList data={data} />
-                        {pageCount > 1 && <PaginationControls />}
+                        {data?.length ? (
+                            <ImageList data={data} />
+                        ) : (
+                            <NoDataFallback />
+                        )}
+                        {(hasPrevPage || hasNextPage) && <PaginationControls />}
                     </>
                 )}
             </div>

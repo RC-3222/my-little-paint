@@ -20,7 +20,7 @@ export const Item = (props: ItemProps) => {
     const [_, setUrlSearchParams] = useSearchParams()
 
     const onEmailClick = () => {
-        setUrlSearchParams(params => ({ ...params, reqStr: userEmail }))
+        setUrlSearchParams(params => ({ ...params, email: userEmail }))
     }
 
     const { deleteImage, isLoading } = useDeleteImage()

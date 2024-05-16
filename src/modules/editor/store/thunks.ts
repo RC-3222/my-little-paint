@@ -1,5 +1,5 @@
 import { firebaseGetImage } from "@appFirebase/api"
-import { createErrorToast } from "@appShared/utils"
+import { createErrorToast, isValidError } from "@appShared/utils"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getImageData = createAsyncThunk(
@@ -10,9 +10,9 @@ export const getImageData = createAsyncThunk(
 
             return data
         } catch (err) {
-            let errorMessage = "Unknown error"
+            let errorMessage = isValidError(err) ? err.message : "Unknown error"
 
-            console.log(err)
+            console.error(err)
             createErrorToast(errorMessage, "dataGettingError")
 
             throw new Error(errorMessage)
