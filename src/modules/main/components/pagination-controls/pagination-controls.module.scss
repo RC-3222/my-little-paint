@@ -1,0 +1,13 @@
+@use "@appShared/scss" as *;
+
+.pageNum {
+    color: $clr-primary;
+    font-size: 1.5rem;
+}
+
+.container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}

@@ -2,16 +2,21 @@ import { auth, db, imagesRef, storage } from "../firebase"
 
 import { v4 as uuidv4 } from "uuid"
 
+import type { Query, DocumentSnapshot } from "firebase/firestore"
 import {
     addDoc,
     getDocs,
     orderBy,
-    query,
     where,
     deleteDoc,
     doc,
     getDoc,
     updateDoc,
+    limit,
+    startAfter,
+    limitToLast,
+    endBefore,
+    query,
 } from "firebase/firestore"
 import {
     ref,
@@ -20,22 +25,58 @@ import {
     uploadString,
 } from "firebase/storage"
 import type { ImageData } from "@appShared/types"
+import { MAX_IMAGES_PER_PAGE } from "@appModules/main/constants"
 
-export async function firebaseGetData(email?: string) {
-    const q = email
-        ? query(
-              imagesRef,
-              where("userEmail", "==", email),
-              orderBy("createAt", "desc"),
-          )
-        : query(imagesRef, orderBy("createAt", "desc"))
+export type QueryDirections = "before" | "after"
 
-    const docs = await getDocs(q)
+type Args = {
+    email?: string | null
+    docId?: string | null
+    queryDirection?: QueryDirections | null
+}
 
-    return docs.docs.map(doc => {
+export async function firebaseGetData({
+    email,
+    docId,
+    queryDirection = "after",
+}: Args = {}) {
+    let mainQ: Query
+
+    if (docId && queryDirection) {
+        mainQ = await getQuery(docId, queryDirection, email)
+    } else {
+        mainQ = email
+            ? query(
+                  imagesRef,
+                  where("userEmail", "==", email),
+                  orderBy("createAt", "desc"),
+                  limit(MAX_IMAGES_PER_PAGE),
+              )
+            : query(
+                  imagesRef,
+                  orderBy("createAt", "desc"),
+                  limit(MAX_IMAGES_PER_PAGE),
+              )
+    }
+
+    const docs = await getDocs(mainQ)
+
+    const hasPrevPage = await hasPrevPageHelper(docs.docs[0], email)
+    const hasNextPage = await hasNextPageHelper(
+        docs.docs[docs.docs.length - 1],
+        email,
+    )
+
+    const data = docs.docs.map(doc => {
         const data = doc.data()
         return { ...data, id: doc.id, createAt: data?.createAt?.seconds }
-    })
+    }) as ImageData[]
+
+    return {
+        data,
+        hasPrevPage,
+        hasNextPage,
+    }
 }
 
 export async function firebaseGetImage(id?: string) {
@@ -102,4 +143,81 @@ export async function firebaseRemoveImage(imgData: ImageData) {
 
     await deleteDoc(docRef)
     await deleteObject(storageRef)
+}
+
+async function getQuery(
+    docId: string,
+    direction: QueryDirections,
+    email?: string | null,
+) {
+    const docSnap = await getDoc(doc(imagesRef, docId))
+
+    if (!docSnap.exists())
+        throw new Error("Couldn't get the doc by the specified id")
+
+    const limitConstraint = direction === "after" ? limit : limitToLast
+    const docConstraint = direction === "after" ? startAfter : endBefore
+
+    return email
+        ? query(
+              imagesRef,
+              where("userEmail", "==", email),
+              orderBy("createAt", "desc"),
+              docConstraint(docSnap),
+              limitConstraint(MAX_IMAGES_PER_PAGE),
+          )
+        : query(
+              imagesRef,
+              orderBy("createAt", "desc"),
+              docConstraint(docSnap),
+              limitConstraint(MAX_IMAGES_PER_PAGE),
+          )
+}
+
+async function hasPrevPageHelper(
+    firstVisibleDoc: DocumentSnapshot,
+    email?: string | null,
+) {
+    const q = email
+        ? query(
+              imagesRef,
+              where("userEmail", "==", email),
+              orderBy("createAt", "desc"),
+              endBefore(firstVisibleDoc),
+              limitToLast(1),
+          )
+        : query(
+              imagesRef,
+              orderBy("createAt", "desc"),
+              endBefore(firstVisibleDoc),
+              limitToLast(1),
+          )
+
+    const docs = await getDocs(q)
+
+    return docs.docs.length > 0
+}
+
+async function hasNextPageHelper(
+    lastVisibleDoc: DocumentSnapshot,
+    email?: string | null,
+) {
+    const q = email
+        ? query(
+              imagesRef,
+              where("userEmail", "==", email),
+              orderBy("createAt", "desc"),
+              startAfter(lastVisibleDoc),
+              limit(1),
+          )
+        : query(
+              imagesRef,
+              orderBy("createAt", "desc"),
+              startAfter(lastVisibleDoc),
+              limit(1),
+          )
+
+    const docs = await getDocs(q)
+
+    return docs.docs.length > 0
 }

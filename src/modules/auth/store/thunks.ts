@@ -7,13 +7,13 @@ import {
 } from "@appFirebase/api"
 import type { UserCredentials } from "."
 import { FirebaseError } from "firebase/app"
-import { createErrorToast } from "@appShared/utils"
+import { createErrorToast, isValidError } from "@appShared/utils"
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
     try {
         await firebaseSignOut()
     } catch (err) {
-        let errorMessage = "Unknown error"
+        const errorMessage = isValidError(err) ? err.message : "Unknown error"
 
         createErrorToast(errorMessage, "signOutError")
 
@@ -28,7 +28,7 @@ export const signIn = createAsyncThunk(
             const response = await firebaseSignIn(email, password)
             return response.user.email as string
         } catch (err) {
-            let errorMessage = "Unknown error"
+            let errorMessage = isValidError(err) ? err.message : "Unknown error"
 
             if (err instanceof FirebaseError) {
                 if (err.code === "auth/invalid-credential") {
@@ -55,7 +55,7 @@ export const signUp = createAsyncThunk(
 
             return response.user.email as string
         } catch (err) {
-            let errorMessage = "Unknown error"
+            let errorMessage = isValidError(err) ? err.message : "Unknown error"
 
             if (err instanceof FirebaseError) {
                 if (err.code === "auth/email-already-in-use") {

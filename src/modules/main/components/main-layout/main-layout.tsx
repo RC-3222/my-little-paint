@@ -6,12 +6,17 @@ import { useEffect } from "react"
 import {
     getData,
     selectData,
+    selectHasNextPage,
+    selectHasPrevPage,
     selectRequestStatus,
 } from "@appModules/main/store"
 import { ImageList } from "../image-list"
 import { useSearchParams } from "react-router-dom"
 import { ReqState } from "@appShared/constants"
-//import { firebaseGetUsers } from "@appFirebase/api"
+import { PaginationControls } from "../pagination-controls"
+import type { QueryDirections } from "@appFirebase/api"
+import { NoDataFallback } from "../no-data-fallback"
+import { UrlParams } from "@appModules/main/constants"
 
 export const MainLayout = () => {
     const dispatch = useAppDispatch()
@@ -20,13 +25,22 @@ export const MainLayout = () => {
 
     const [urlParams] = useSearchParams()
 
-    const searchParam = urlParams.get("reqStr")
+    const email = urlParams.get(UrlParams.Email)
+    const direction = urlParams.get(UrlParams.QueryDirection)
+    const docId = urlParams.get(UrlParams.DocId)
+
+    const hasPrevPage = useAppSelector(selectHasPrevPage)
+    const hasNextPage = useAppSelector(selectHasNextPage)
 
     useEffect(() => {
-        dispatch(getData(searchParam ?? undefined))
-
-        //firebaseGetUsers().then((data)=>console.log(data)).catch(err=>console.error(err))
-    }, [searchParam, dispatch])
+        dispatch(
+            getData({
+                email: email,
+                queryDirection: direction as QueryDirections,
+                docId: docId,
+            }),
+        )
+    }, [email, direction, docId, dispatch])
 
     const reqStatus = useAppSelector(selectRequestStatus)
 
@@ -36,7 +50,14 @@ export const MainLayout = () => {
                 {reqStatus === ReqState.Pending ? (
                     <Loader className={styles.loader} />
                 ) : (
-                    <ImageList data={data} />
+                    <>
+                        {data?.length ? (
+                            <ImageList data={data} />
+                        ) : (
+                            <NoDataFallback />
+                        )}
+                        {(hasPrevPage || hasNextPage) && <PaginationControls />}
+                    </>
                 )}
             </div>
         </main>

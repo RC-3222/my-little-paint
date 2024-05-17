@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Select } from "@appShared/components"
 
 import type { Option } from "@appShared/components/select"
+import { UrlParams } from "@appModules/main/constants"
 
 export const Search = () => {
     const [searchParams, setUrlSearchParams] = useSearchParams()
@@ -11,12 +12,11 @@ export const Search = () => {
     const [open, setOpen] = useState(false)
 
     const onChange = (val: string | number | null) => {
-        if (val === "All")
+        if (val === "All") setUrlSearchParams({})
+        else
             setUrlSearchParams(params => {
-                params.delete("reqStr")
-                return { ...params }
+                return { ...params, [UrlParams.Email]: val }
             })
-        else setUrlSearchParams(params => ({ ...params, reqStr: val }))
     }
 
     const [options, setOptions] = useState<Option[]>([
@@ -41,7 +41,7 @@ export const Search = () => {
         setOpen(open)
     }
 
-    const value = searchParams.get("reqStr") ?? "All"
+    const value = searchParams.get(UrlParams.Email) || "All"
 
     return (
         <Select

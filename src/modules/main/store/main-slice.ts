@@ -7,11 +7,15 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 export interface MainSliceState {
     data: ImageData[]
     reqStatus: ReqState
+    hasPrevPage: boolean
+    hasNextPage: boolean
 }
 
 const initialState: MainSliceState = {
     data: [],
     reqStatus: ReqState.Idle,
+    hasPrevPage: false,
+    hasNextPage: false,
 }
 
 export const mainSlice = createAppSlice({
@@ -29,7 +33,10 @@ export const mainSlice = createAppSlice({
             })
             .addCase(getData.fulfilled, (state, action) => {
                 state.reqStatus = ReqState.Idle
-                state.data = action.payload
+                const { data, hasPrevPage, hasNextPage } = action.payload
+                state.data = data
+                state.hasPrevPage = hasPrevPage
+                state.hasNextPage = hasNextPage
             })
             .addCase(getData.rejected, state => {
                 state.reqStatus = ReqState.Failed
@@ -37,10 +44,17 @@ export const mainSlice = createAppSlice({
     },
     selectors: {
         selectData: state => state.data,
+        selectHasPrevPage: state => state.hasPrevPage,
+        selectHasNextPage: state => state.hasNextPage,
         selectRequestStatus: state => state.reqStatus,
     },
 })
 
 export const { deleteImage } = mainSlice.actions
 
-export const { selectData, selectRequestStatus } = mainSlice.selectors
+export const {
+    selectData,
+    selectRequestStatus,
+    selectHasPrevPage,
+    selectHasNextPage,
+} = mainSlice.selectors

@@ -4,7 +4,7 @@ import styles from "./editor-layout.module.scss"
 import { Loader } from "@appShared/components"
 import { InstrumentPanel } from "../instrument-panel/instrument-panel"
 import { useCanvas, useCanvasImageData } from "@appModules/editor/hooks"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { SaveImageForm } from "../save-image-form"
 import type { CanvasData } from "@appModules/editor/types"
 import { useCanvasShortcuts } from "@appModules/editor/hooks/use-canvas-shortcuts"
@@ -17,6 +17,7 @@ import {
     setCurrentImageData,
 } from "@appModules/editor/store"
 import { ReqState } from "@appShared/constants"
+import { auth } from "@appFirebase/firebase"
 
 export const EditorLayout = () => {
     const canvasDataRef = useRef<CanvasData>({ isDrawing: false })
@@ -38,7 +39,7 @@ export const EditorLayout = () => {
 
     const [urlParams, setUrlSearchParams] = useSearchParams()
 
-    const restartHandler = () => {
+    const restartHandler = useCallback(() => {
         setUrlSearchParams({})
         dispatch(setCurrentImageData(null))
         if (mainCanvasRef.current)
@@ -50,9 +51,19 @@ export const EditorLayout = () => {
                     mainCanvasRef.current.width,
                     mainCanvasRef.current.height,
                 )
-    }
+    }, [dispatch, setUrlSearchParams])
 
     const imageId = urlParams.get("imageId")
+
+    useEffect(() => {
+        if (
+            currentImageData &&
+            auth.currentUser &&
+            currentImageData?.userEmail !== auth.currentUser?.email
+        ) {
+            restartHandler()
+        }
+    }, [currentImageData, restartHandler])
 
     useEffect(() => {
         if (imageId && imageId !== currentImageData?.id) {

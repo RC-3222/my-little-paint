@@ -24,7 +24,7 @@ export const Item = (props: ItemProps) => {
     const [showFullImage, setShowFullImage] = useState(false)
 
     const onEmailClick = () => {
-        setUrlSearchParams(params => ({ ...params, reqStr: userEmail }))
+        setUrlSearchParams(params => ({ ...params, email: userEmail }))
     }
 
     const { deleteImage, isLoading } = useDeleteImage()
