@@ -13,7 +13,7 @@ export const signOut = createAsyncThunk("auth/signOut", async () => {
     try {
         await firebaseSignOut()
     } catch (err) {
-        let errorMessage = isValidError(err) ? err.message : "Unknown error"
+        const errorMessage = isValidError(err) ? err.message : "Unknown error"
 
         createErrorToast(errorMessage, "signOutError")
 

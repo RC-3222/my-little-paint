@@ -10,7 +10,9 @@ export const getImageData = createAsyncThunk(
 
             return data
         } catch (err) {
-            let errorMessage = isValidError(err) ? err.message : "Unknown error"
+            const errorMessage = isValidError(err)
+                ? err.message
+                : "Unknown error"
 
             console.error(err)
             createErrorToast(errorMessage, "dataGettingError")

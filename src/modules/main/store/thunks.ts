@@ -18,7 +18,9 @@ export const getData = createAsyncThunk(
 
             return resData
         } catch (err) {
-            let errorMessage = isValidError(err) ? err.message : "Unknown error"
+            const errorMessage = isValidError(err)
+                ? err.message
+                : "Unknown error"
 
             console.error(err)
             createErrorToast(errorMessage, "dataGettingError")
