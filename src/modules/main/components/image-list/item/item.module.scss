@@ -88,3 +88,22 @@
     align-items: center;
     justify-content: center;
 }
+
+.fullImg {
+    box-sizing: border-box;
+
+    &Container {
+        box-sizing: border-box;
+
+        width: min(100%, 95vw);
+        height: min(100%, 95vh);
+
+        overflow: auto;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        border: 2px solid $clr-secondary;
+        border-radius: 4px;
+    }
+}

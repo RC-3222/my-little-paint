@@ -16,3 +16,6 @@ export { ColorPicker } from "./color-picker"
 export { StickyHeader } from "./sticky-header"
 
 export { Link } from "./link"
+
+export { Modal } from "./modal"
+export { Confirm } from "./confirm"

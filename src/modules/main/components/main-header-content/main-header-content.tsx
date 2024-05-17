@@ -6,8 +6,12 @@ import { Search } from "../search"
 import { useAppDispatch } from "@appStore"
 
 import styles from "./main-header-content.module.scss"
+import { useState } from "react"
+import { Confirm } from "@appShared/components"
 
 export const MainHeaderContent = () => {
+    const [showConfirmation, setShowConfirmation] = useState(false)
+
     const dispatch = useAppDispatch()
 
     return (
@@ -22,13 +26,20 @@ export const MainHeaderContent = () => {
                 <NavPanel />
                 <Button
                     variant="secondary"
-                    onClick={() => {
-                        dispatch(signOut())
-                    }}
+                    onClick={() => setShowConfirmation(true)}
                 >
                     Sign Out
                 </Button>
             </div>
+            <Confirm
+                open={showConfirmation}
+                onClose={() => setShowConfirmation(false)}
+                onConfirm={() => {
+                    dispatch(signOut())
+                    setShowConfirmation(false)
+                }}
+                text={`Are you sure you want to sign out?`}
+            />
         </>
     )
 }
