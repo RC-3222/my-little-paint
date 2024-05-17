@@ -3,6 +3,7 @@ import {
     FormInput,
     FormSubmitButton,
     GlobalLoader,
+    Modal,
 } from "@appShared/components"
 
 import styles from "./save-image-form.module.scss"
@@ -10,16 +11,20 @@ import { SaveImgSchema } from "@appModules/editor/schemas"
 import type { TypeOf } from "zod"
 import { useSaveImage } from "@appModules/editor/hooks"
 import { useEffect, type RefObject } from "react"
-import { Backdrop } from "@appShared/components/backdrop"
 import { useAppSelector } from "@appStore"
 import { selectCurrentImageData } from "@appModules/editor/store"
 
 type SaveImageFormProps = {
     canvasRef: RefObject<HTMLCanvasElement>
     onClose: () => void
+    open: boolean
 }
 
-export const SaveImageForm = ({ onClose, canvasRef }: SaveImageFormProps) => {
+export const SaveImageForm = ({
+    onClose,
+    canvasRef,
+    open,
+}: SaveImageFormProps) => {
     const { saveImage, isLoading } = useSaveImage()
 
     const currentImageData = useAppSelector(selectCurrentImageData)
@@ -52,11 +57,7 @@ export const SaveImageForm = ({ onClose, canvasRef }: SaveImageFormProps) => {
 
     return (
         <>
-            <Backdrop
-                onClick={e => {
-                    if (e.target === e.currentTarget) onClose()
-                }}
-            >
+            <Modal open={open} onClose={onClose}>
                 <Form
                     defaultValues={{ imgName: currentImageData?.imageName }}
                     schema={SaveImgSchema}
@@ -69,7 +70,7 @@ export const SaveImageForm = ({ onClose, canvasRef }: SaveImageFormProps) => {
                     <FormInput label="Image name" type="text" name="imgName" />
                     <FormSubmitButton>Save</FormSubmitButton>
                 </Form>
-            </Backdrop>
+            </Modal>
             {isLoading && <GlobalLoader />}
         </>
     )
