@@ -101,6 +101,7 @@ export const EditorLayout = () => {
             </main>
             {isSaveFormOpen && (
                 <SaveImageForm
+                    open={isSaveFormOpen}
                     onClose={() => setIsSaveFormOpen(false)}
                     canvasRef={mainCanvasRef}
                 />
